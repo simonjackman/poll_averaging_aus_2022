@@ -15,10 +15,9 @@
 
 <title>Poll averages for the 2022 Australian election</title>
 
-<script src="site_libs/header-attrs/header-attrs.js"></script>
 <script src="site_libs/jquery/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap/shim/respond.min.js"></script>
@@ -35,22 +34,12 @@
 <link href="site_libs/tocify/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify/jquery.tocify.js"></script>
 <script src="site_libs/navigation/tabsets.js"></script>
-<link href="site_libs/highlightjs/textmate.css" rel="stylesheet" />
+<link href="site_libs/highlightjs/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs/highlight.js"></script>
 <script src="site_libs/kePrint/kePrint.js"></script>
 <link href="site_libs/lightable/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
-
-<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
-<!-- Add a small amount of space between sections. -->
-<style type="text/css">
-div.section {
-  padding-top: 12px;
-}
-</style>
-
-
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -99,6 +88,7 @@ div.csl-indent {
 }
 </style>
 
+<link rel="stylesheet" href="preamble.css" type="text/css" />
 
 
 
@@ -386,369 +376,31 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Poll averages for the 2022 Australian
-election</h1>
+<h1 class="title toc-ignore">Poll averages for the 2022 Australian election</h1>
 <h4 class="author">Professor Simon Jackman</h4>
 <h4 class="date">20 May 2022</h4>
 
 </div>
 
 
-<p>
-<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span>
-</button>
-</p>
-<div id="workflowr-report" class="collapse">
-<ul class="nav nav-tabs">
-<li class="active">
-<a data-toggle="tab" href="#summary">Summary</a>
-</li>
-<li>
-<a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
-</li>
-<li>
-<a data-toggle="tab" href="#versions">Past versions</a>
-</li>
-</ul>
-<div class="tab-content">
-<div id="summary" class="tab-pane fade in active">
-<p>
-<strong>Last updated:</strong> 2022-05-20
-</p>
-<p>
-<strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
-</p>
-<p>
-<strong>Knit directory:</strong> <code>poll_averaging/</code> <span
-class="glyphicon glyphicon-question-sign" aria-hidden="true"
-title="This is the local directory in which the code in this file was executed.">
-</span>
-</p>
-<p>
-This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
-analysis was created with <a
-  href="https://github.com/workflowr/workflowr">workflowr</a> (version
-1.7.0). The <em>Checks</em> tab describes the reproducibility checks
-that were applied when the results were created. The <em>Past
-versions</em> tab lists the development history.
-</p>
-<hr>
-</div>
-<div id="checks" class="tab-pane fade">
-<div id="workflowr-checks" class="panel-group">
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
-</p>
-</div>
-<div id="strongRMarkdownfilestronguptodate"
-class="panel-collapse collapse">
-<div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
-</p>
-</div>
-<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
-<div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the
-global environment can affect the analysis in your R Markdown file in
-unknown ways. For reproduciblity it’s best to always run the code in an
-empty environment.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220519code">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Seed:</strong>
-<code>set.seed(20220519)</code> </a>
-</p>
-</div>
-<div id="strongSeedstrongcodesetseed20220519code"
-class="panel-collapse collapse">
-<div class="panel-body">
-<p>The command <code>set.seed(20220519)</code> was run prior to running
-the code in the R Markdown file. Setting a seed ensures that any results
-that rely on randomness, e.g. subsampling or permutations, are
-reproducible.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Session information:</strong>
-recorded </a>
-</p>
-</div>
-<div id="strongSessioninformationstrongrecorded"
-class="panel-collapse collapse">
-<div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package
-versions is critical for reproducibility.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
-</p>
-</div>
-<div id="strongCachestrongdetected" class="panel-collapse collapse">
-<div class="panel-body">
-The following chunks had caches available:
-<ul>
-<li>
-unnamed-chunk-2
-</li>
-</ul>
-<p>To ensure reproducibility of the results, delete the cache directory
-<code>index_cache</code> and re-run the analysis. To have workflowr
-automatically delete the cache directory prior to building the file, set
-<code>delete_cache = TRUE</code> when running <code>wflow_build()</code>
-or <code>wflow_publish()</code>.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
-</p>
-</div>
-<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
-<div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr
-project makes it easier to run your code on other machines.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomsimonjackmanpollaveragingaus2022tree4d78fea1cc5fd6d529fd35d5a27474a2e227def5targetblank4d78feaa">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/tree/4d78fea1cc5fd6d529fd35d5a27474a2e227def5" target="_blank">4d78fea</a>
-</a>
-</p>
-</div>
-<div
-id="strongRepositoryversionstrongahrefhttpsgithubcomsimonjackmanpollaveragingaus2022tree4d78fea1cc5fd6d529fd35d5a27474a2e227def5targetblank4d78feaa"
-class="panel-collapse collapse">
-<div class="panel-body">
-<p>
-Great! You are using Git for version control. Tracking code development
-and connecting the code version to the results is critical for
-reproducibility.
-</p>
-<p>
-The results in this page were generated with repository version
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/tree/4d78fea1cc5fd6d529fd35d5a27474a2e227def5" target="_blank">4d78fea</a>.
-See the <em>Past versions</em> tab to see a history of the changes made
-to the R Markdown and HTML files.
-</p>
-<p>
-Note that you need to be careful to ensure that all relevant files for
-the analysis have been committed to Git prior to generating the results
-(you can use <code>wflow_publish</code> or
-<code>wflow_git_commit</code>). workflowr only checks the R Markdown
-file, but you know if there are other scripts or data files that it
-depends on. Below is the status of the Git repository when the results
-were generated:
-</p>
-<pre><code>
-Ignored files:
-    Ignored:    .DS_Store
-    Ignored:    .Rproj.user/
-    Ignored:    R/common.R
-    Ignored:    R/from_casey.R
-    Ignored:    analysis/figure/
-    Ignored:    analysis/index_cache/
-    Ignored:    data/.DS_Store
-    Ignored:    data/2022/.DS_Store
-    Ignored:    for_casey/
-    Ignored:    output/.DS_Store
-
-Untracked files:
-    Untracked:  poll_averaging.Rmd
-    Untracked:  run.sh
-
-</code></pre>
-<p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not
-included in this status report because it is ok for generated content to
-have uncommitted changes.
-</p>
-</div>
-</div>
-</div>
-</div>
-<hr>
-</div>
-<div id="versions" class="tab-pane fade">
-
-<p>
-These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
-(<code>docs/index.html</code>) files. If you’ve configured a remote Git
-repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
-in the table below to view the files as they were in that past version.
-</p>
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-File
-</th>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-<th>
-Message
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/simonjackman/poll_averaging_aus_2022/73e9153a39e66793b326669681d05a2b595ca911/docs/index.html" target="_blank">73e9153</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/simonjackman/poll_averaging_aus_2022/be009ede2811f35f101421206affee54373f7e29/docs/index.html" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/2fef4b064acd4ce1302088e8c36b72ba11540f9c/analysis/index.Rmd" target="_blank">2fef4b0</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-<td>
-wflow_git_commit(all = TRUE)
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/9a23a0cf5a863d45b6d05b24bb77004a0d2ec240/analysis/index.Rmd" target="_blank">9a23a0c</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-19
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<hr>
-</div>
-</div>
-</div>
-<div id="summary" class="section level1">
-<h1>Summary</h1>
+<div id="summary" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Summary</h1>
 <div id="summary" class="highlights">
 <ul>
-<li><p>I compute an average of publicly available opinion polls on
-voting intentions for elections to Australia’s House of Representatives
-on 21 May 2022.</p></li>
-<li><p>I then adjust the resulting estimated level of voting intention
-by the <em>error</em> in poll averages observed in recent Australian
-elections.</p></li>
-<li><p>Table @ref(tab:load-summary-table) shows that if national polls
-are carrying the error they exhibited in 2019, the election is closer to
-51/49 ALP/Coalition in two-party preferred terms.</p></li>
-<li><p>If the polls are carrying the average level of bias seen in the
-five previous elections (2007 to 2019), then the election is more likely
-53-47.</p></li>
-<li><p>It is extremely unlikely that the Coalition can form government
-with a national 2PP vote of 47%.</p></li>
-<li><p>The Coalition <em>did</em> form government in 1998 with 49% of
-the national 2PP.</p></li>
+<li><p>I compute an average of publicly available opinion polls on voting
+intentions for elections to Australia’s House of Representatives on 21 May 2022.</p></li>
+<li><p>I then adjust the resulting estimated level of voting intention by the
+<em>error</em> in poll averages observed in recent Australian elections.</p></li>
+<li><p>Table <a href="#tab:load-summary-table">1.1</a> shows that if national polls are carrying the error they exhibited in 2019, the election is closer to 51/49 ALP/Coalition in two-party preferred terms.</p></li>
+<li><p>If the polls are carrying the average level of bias seen in the five previous elections (2007 to 2019), then the election is more likely 53-47.</p></li>
+<li><p>It is extremely unlikely that the Coalition can form government with a national 2PP vote of 47%.</p></li>
+<li><p>The Coalition <em>did</em> form government in 1998 with 49% of the national 2PP.</p></li>
 </ul>
 </div>
 <p>Currently:</p>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Summary of poll averages and adjustments, computed 20 May 2022
+<span id="tab:load-summary-table">Table 1.1: </span>Summary of poll averages and adjustments, computed 20 May 2022
 </caption>
 <thead>
 <tr>
@@ -822,7 +474,8 @@ Correct for average error
 </tr>
 <tr>
 <td style="text-align:left;">
-Integrating uncertainty in average &amp; error
+Integrating uncertainty
+in average &amp; error
 </td>
 <td style="text-align:right;">
 35.9
@@ -840,114 +493,67 @@ Integrating uncertainty in average &amp; error
 </tbody>
 </table>
 </div>
-<div id="errors-in-poll-averages-australian-elections-2007-to-2019"
-class="section level1">
-<h1>Errors in poll averages, Australian elections 2007 to 2019</h1>
-<p>Averages of opinion polls figure prominently in commentary and
-prognostication about the upcoming Federal election. My work is being
-used by the ABC regularly, including on its flagship <em>Insiders</em>
-programme.</p>
-<p>By and large, 2019 pre-election polls — and averages of those polls —
-missed the mark. After vigorous introspection, and the formation of an
-Australian Polling Council, some polling firms have changed their
-methodology and methods of reporting. Polls fielded shortly before
-recent state elections were reasonably accurate, bolstering confidence
-that 2022 election polls will be more accurate than in 2019.</p>
-<p>We draw on analysis presented in summary form in <span
-class="citation">Mansillo and Jackman (2020)</span>, where a
-poll-averaging model was fit to Australian opinion polls fielded in the
-period 2007-2019.</p>
-<p>Details on the poll averaging model and fitting it to published
-polling data appear in the Appendix.</p>
-<p>Figure @ref(fig:load-older-runs) shows the performance of poll
-averages in five previous elections: 2007, 2010, 2013, 2016 and 2019,
-graphing the error of the poll average computed over time until the
-election. Error is defined as poll average minus the actual election
-result, so that</p>
+<div id="errors-in-poll-averages-australian-elections-2007-to-2019" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Errors in poll averages, Australian elections 2007 to 2019</h1>
+<p>Averages of opinion polls figure prominently in commentary and prognostication
+about the upcoming Federal election. My work is being used by the ABC regularly,
+including on its flagship <em>Insiders</em> programme.</p>
+<p>By and large, 2019 pre-election polls — and averages of those polls — missed
+the mark. After vigorous introspection, and the formation of an Australian
+Polling Council, some polling firms have changed their methodology and methods
+of reporting. Polls fielded shortly before recent state elections were
+reasonably accurate, bolstering confidence that 2022 election polls will be more
+accurate than in 2019.</p>
+<p>We draw on analysis presented in summary form in
+<span class="citation">Mansillo and Jackman (2020)</span>, where a poll-averaging model was fit to
+Australian opinion polls fielded in the period 2007-2019.</p>
+<p>Details on the poll averaging model and fitting it to published polling data
+appear in the Appendix.</p>
+<p>Figure <a href="#fig:load-older-runs">2.1</a> shows the performance of poll averages in five
+previous elections: 2007, 2010, 2013, 2016 and 2019, graphing the error of the
+poll average computed over time until the election. Error is defined as poll
+average minus the actual election result, so that</p>
 <ul>
-<li><p>positive errors mean the polls are <em>over-estimates</em> of a
-party’s actual level of support, or that the polls are collectively
-<em>biased upwards</em> with respect to that party</p></li>
-<li><p>conversely, negative errors mean the polls are
-<em>under-estimates</em> of a party’s actual level of support, or that
-the polls are collectively <em>biased downwards</em> with respect to
-that party</p></li>
+<li><p>positive errors mean the polls are <em>over-estimates</em> of a party’s actual
+level of support, or that the polls are collectively <em>biased upwards</em> with
+respect to that party</p></li>
+<li><p>conversely, negative errors mean the polls are <em>under-estimates</em> of a
+party’s actual level of support, or that the polls are collectively <em>biased
+downwards</em> with respect to that party</p></li>
 </ul>
-<p>Since the poll average can be updated daily (even if the absence of
-new polls), we compute and plot errors in the poll average as daily time
-series in Figure @ref(fig:load-older-runs). 2019 poll error is
-highlighted in orange, while the blue line displays the average of the
-poll errors on a particular day for each party, averaging over the five
-elections (2007 to 2019, inclusive). The graph zooms in on the sixty
-days prior to each election.</p>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/load-older-runs-1.png" alt="Errors in poll averages, by party, year and days until election, 2007, 2010, 2013, 2016 and 2019." width="864" />
+<p>Since the poll average can be updated daily (even if the absence of new polls),
+we compute and plot errors in the poll average as daily time series in Figure
+<a href="#fig:load-older-runs">2.1</a>. 2019 poll error is highlighted in orange, while the
+blue line displays the average of the poll errors on a particular day for each
+party, averaging over the five elections (2007 to 2019, inclusive). The graph
+zooms in on the sixty days prior to each election.</p>
+<div class="figure"><span style="display:block;" id="fig:load-older-runs"></span>
+<img src="index_files/figure-html/load-older-runs-1.png" alt="Errors in poll averages, by party, year and days until election, 2007, 2010, 2013, 2016 and 2019." width="864" />
 <p class="caption">
-Errors in poll averages, by party, year and days until election, 2007,
-2010, 2013, 2016 and 2019.
+Figure 2.1: Errors in poll averages, by party, year and days until election, 2007, 2010, 2013, 2016 and 2019.
 </p>
-</div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-load-older-runs-1">
-Past versions of load-older-runs-1.png
-</button>
-</p>
-<div id="fig-load-older-runs-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/load-older-runs-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
 </div>
 <p><br></p>
 <p>First, the good news:</p>
 <ul>
-<li><p>as the election gets closer, poll averages perform better, with
-errors getting smaller, with the possible exception of estimates of vote
-shares for the Greens.</p></li>
-<li><p>by Election Day, the average error of the poll averages is
-generally small, ranging from 0.5 for the Labor Party’s primary vote
-share to -1.3 for the Coalition’s share of the two-party preferred vote;
-see Table @ref(tab:error-final).</p></li>
-<li><p>the party winning the two-party preferred vote almost always
-forms government: rare exceptions are 1998 and 1990. Between 2007 and
-2019, poll averages of the two-party preferred result have picked the
-election winner correctly, save in 2019. In 2010 the polls
-under-estimated the Coalition’s performance by a sizeable margin with a
-poll average of 48.1% versus the actual result of 49.9% and 73 of 150
-seats.</p></li>
+<li><p>as the election gets closer, poll averages perform better, with errors
+getting smaller, with the possible exception of estimates of vote shares for
+the Greens.</p></li>
+<li><p>by Election Day, the average error of the poll averages is generally small,
+ranging from 0.5 for the Labor Party’s primary vote share to -1.3 for the
+Coalition’s share of the two-party preferred vote; see Table
+<a href="#tab:error-final">2.1</a>.</p></li>
+<li><p>the party winning the two-party preferred vote almost always forms
+government: rare exceptions are 1998 and 1990. Between 2007 and 2019, poll
+averages of the two-party preferred result have picked the election winner
+correctly, save in 2019. In 2010 the polls under-estimated the Coalition’s
+performance by a sizeable margin with a poll average of 48.1% versus the
+actual result of 49.9% and 73 of 150 seats.</p></li>
 </ul>
 <p><br></p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-Election Day error of poll averages, 2007 to 2019 and average.
-Positive/negative errors = polls are over/under estimates of party
-support.
+<span id="tab:error-final">Table 2.1: </span>Election Day error of poll averages, 2007 to 2019 and average. Positive/negative errors = polls are over/under estimates of party support.
 </caption>
 <thead>
 <tr>
@@ -1116,718 +722,164 @@ Average
 </table>
 <p>The less good news:</p>
 <ul>
-<li><p>Australian polls exhibits biases that persist over decades. ALP
-and Green 1st preferences are typically over-estimated, while Coalition
-and “Other” are usually under-estimated by poll averages.</p></li>
-<li><p>Unsurprisingly then, poll averages typically underestimate the
-Coalition’s share of the two-party preferred vote, by an average of 1.1
-percentage points.</p></li>
-<li><p>The poll errors of 2019 are large both in absolute terms and
-relative to errors in other elections. The underestimate of the
-Coalition’s first preference vote share, 3.6 percentage points, has a
-magnitude more than twice that seen in the four previous elections for
-either major party. The 2.5 percentage point miss on the two-party
-preferred vote in 2019 was more than twice the average magnitude of the
-errors in the earlier elections.</p></li>
+<li><p>Australian polls exhibits biases that persist over decades. ALP and Green
+1st preferences are typically over-estimated, while Coalition and “Other”
+are usually under-estimated by poll averages.</p></li>
+<li><p>Unsurprisingly then, poll averages typically underestimate the Coalition’s
+share of the two-party preferred vote, by an average of 1.1 percentage
+points.</p></li>
+<li><p>The poll errors of 2019 are large both in absolute terms and relative to
+errors in other elections. The underestimate of the Coalition’s first
+preference vote share, 3.6 percentage points, has a magnitude more than
+twice that seen in the four previous elections for either major party. The
+2.5 percentage point miss on the two-party preferred vote in 2019 was more
+than twice the average magnitude of the errors in the earlier elections.</p></li>
 </ul>
 <p><br></p>
 </div>
-<div id="poll-averages-for-2022-the-story-so-far"
-class="section level1">
-<h1>Poll averages for 2022: the story so far</h1>
-<p>What does this past history with respect to the errors in poll
-averages imply for the poll averages constructed from the 2022 data?</p>
-<p>We begin by presenting poll averages from the 2019-2022 election
-cycle, to date.</p>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/alp-plot-1.png" alt="ALP 1st preferences" width="864" />
+<div id="poll-averages-for-2022-the-story-so-far" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Poll averages for 2022: the story so far</h1>
+<p>What does this past history with respect to the errors in poll averages imply
+for the poll averages constructed from the 2022 data?</p>
+<p>We begin by presenting poll averages from the 2019-2022 election cycle, to date.</p>
+<div class="figure"><span style="display:block;" id="fig:alp-plot"></span>
+<img src="index_files/figure-html/alp-plot-1.png" alt="ALP 1st preferences" width="864" />
 <p class="caption">
-ALP 1st preferences
+Figure 3.1: ALP 1st preferences
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-alp-plot-1">
-Past versions of alp-plot-1.png
-</button>
-</p>
-<div id="fig-alp-plot-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/alp-plot-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/lnp-plot-1.png" alt="LNP 1st preferences" width="864" />
+<div class="figure"><span style="display:block;" id="fig:lnp-plot"></span>
+<img src="index_files/figure-html/lnp-plot-1.png" alt="LNP 1st preferences" width="864" />
 <p class="caption">
-LNP 1st preferences
+Figure 3.2: LNP 1st preferences
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-lnp-plot-1">
-Past versions of lnp-plot-1.png
-</button>
-</p>
-<div id="fig-lnp-plot-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/lnp-plot-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/grn-plot-1.png" alt="GRN 1st preferences" width="864" />
+<div class="figure"><span style="display:block;" id="fig:grn-plot"></span>
+<img src="index_files/figure-html/grn-plot-1.png" alt="GRN 1st preferences" width="864" />
 <p class="caption">
-GRN 1st preferences
+Figure 3.3: GRN 1st preferences
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-grn-plot-1">
-Past versions of grn-plot-1.png
-</button>
-</p>
-<div id="fig-grn-plot-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/grn-plot-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/lnp-2pp-plot-1.png" alt="LNP two party preferred" width="864" />
+<div class="figure"><span style="display:block;" id="fig:lnp-2pp-plot"></span>
+<img src="index_files/figure-html/lnp-2pp-plot-1.png" alt="LNP two party preferred" width="864" />
 <p class="caption">
-LNP two party preferred
+Figure 3.4: LNP two party preferred
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-lnp-2pp-plot-1">
-Past versions of lnp-2pp-plot-1.png
-</button>
-</p>
-<div id="fig-lnp-2pp-plot-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/lnp-2pp-plot-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="zoom-in-with-2019-overlay" class="section level2">
-<h2>2022 zoom-in with 2019 overlay</h2>
-<p>We also zoom-in on calendar year 2022, overlaying the poll average
-from the same stage of the 2019 campaign.</p>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/alp-plot-zoom-1.png" alt="ALP 1st preferences, 2022" width="864" />
+<div id="zoom-in-with-2019-overlay" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> 2022 zoom-in with 2019 overlay</h2>
+<p>We also zoom-in on calendar year 2022, overlaying the poll average from the same
+stage of the 2019 campaign.</p>
+<div class="figure"><span style="display:block;" id="fig:alp-plot-zoom"></span>
+<img src="index_files/figure-html/alp-plot-zoom-1.png" alt="ALP 1st preferences, 2022" width="864" />
 <p class="caption">
-ALP 1st preferences, 2022
+Figure 3.5: ALP 1st preferences, 2022
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-alp-plot-zoom-1">
-Past versions of alp-plot-zoom-1.png
-</button>
-</p>
-<div id="fig-alp-plot-zoom-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/alp-plot-zoom-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/lnp-plot-zoom-1.png" alt="LNP 1st preferences, 2022" width="864" />
+<div class="figure"><span style="display:block;" id="fig:lnp-plot-zoom"></span>
+<img src="index_files/figure-html/lnp-plot-zoom-1.png" alt="LNP 1st preferences, 2022" width="864" />
 <p class="caption">
-LNP 1st preferences, 2022
+Figure 3.6: LNP 1st preferences, 2022
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-lnp-plot-zoom-1">
-Past versions of lnp-plot-zoom-1.png
-</button>
-</p>
-<div id="fig-lnp-plot-zoom-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/lnp-plot-zoom-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/grn-plot-zoom-1.png" alt="GRN 1st preferences, 2022" width="864" />
+<div class="figure"><span style="display:block;" id="fig:grn-plot-zoom"></span>
+<img src="index_files/figure-html/grn-plot-zoom-1.png" alt="GRN 1st preferences, 2022" width="864" />
 <p class="caption">
-GRN 1st preferences, 2022
+Figure 3.7: GRN 1st preferences, 2022
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-grn-plot-zoom-1">
-Past versions of grn-plot-zoom-1.png
-</button>
-</p>
-<div id="fig-grn-plot-zoom-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/grn-plot-zoom-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/lnp-2pp-plot-zoom-1.png" alt="LNP two party preferred, 2022" width="864" />
+<div class="figure"><span style="display:block;" id="fig:lnp-2pp-plot-zoom"></span>
+<img src="index_files/figure-html/lnp-2pp-plot-zoom-1.png" alt="LNP two party preferred, 2022" width="864" />
 <p class="caption">
-LNP two party preferred, 2022
+Figure 3.8: LNP two party preferred, 2022
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-lnp-2pp-plot-zoom-1">
-Past versions of lnp-2pp-plot-zoom-1.png
-</button>
-</p>
-<div id="fig-lnp-2pp-plot-zoom-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/lnp-2pp-plot-zoom-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
-</div>
-</div>
-<div id="adjusting-2022-poll-averages-given-errors-in-past-years"
-class="section level1">
-<h1>Adjusting 2022 poll averages given errors in past years</h1>
+<div id="adjusting-2022-poll-averages-given-errors-in-past-years" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Adjusting 2022 poll averages given errors in past years</h1>
 <p>We consider three adjustments to the 2022 poll averages:</p>
 <ul>
 <li><p>day-specific 2019 error.</p></li>
-<li><p>day-specific average error, computed from poll averages 2007 to
-2019, inclusive.</p></li>
+<li><p>day-specific average error, computed from poll averages 2007 to 2019,
+inclusive.</p></li>
 <li><p>sampling from error distribution given errors listed in Table
-@ref(tab:error-final), subject to the constraint that there is a 20%
-chance of errors larger than the largest errors observed in previous
-elections.</p></li>
+<a href="#tab:error-final">2.1</a>, subject to the constraint that there is a 20% chance
+of errors larger than the largest errors observed in previous elections.</p></li>
 </ul>
-<div class="alert alert-warning">
-<p>
-<strong>Warning:</strong> The above code chunk cached its results, but
-it won’t be re-run if previous chunks it depends on are updated. If you
-need to use caching, it is highly recommended to also set
-<code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the
-file (in a chunk that is not cached). Alternatively, you can customize
-the option <code>dependson</code> for each individual chunk that is
-cached. Using either <code>autodep</code> or <code>dependson</code> will
-remove this warning. See the
-<a href="https://yihui.name/knitr/options/#cache"
->knitr cache options</a> for more details.
-</p>
-</div>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/adjust-alp-1.png" alt="Adjusted poll average, ALP 1st preferences" width="672" />
+<div class="figure"><span style="display:block;" id="fig:adjust-alp"></span>
+<img src="index_files/figure-html/adjust-alp-1.png" alt="Adjusted poll average, ALP 1st preferences" width="672" />
 <p class="caption">
-Adjusted poll average, ALP 1st preferences
+Figure 4.1: Adjusted poll average, ALP 1st preferences
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-adjust-alp-1">
-Past versions of adjust-alp-1.png
-</button>
-</p>
-<div id="fig-adjust-alp-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/adjust-alp-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/adjust-lnp-1.png" alt="Adjusted poll average, Coalition 1st preferences" width="672" />
+<div class="figure"><span style="display:block;" id="fig:adjust-lnp"></span>
+<img src="index_files/figure-html/adjust-lnp-1.png" alt="Adjusted poll average, Coalition 1st preferences" width="672" />
 <p class="caption">
-Adjusted poll average, Coalition 1st preferences
+Figure 4.2: Adjusted poll average, Coalition 1st preferences
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-adjust-lnp-1">
-Past versions of adjust-lnp-1.png
-</button>
-</p>
-<div id="fig-adjust-lnp-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/adjust-lnp-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/adjust-grn-1.png" alt="Adjusted poll average, Green 1st preferences" width="672" />
+<div class="figure"><span style="display:block;" id="fig:adjust-grn"></span>
+<img src="index_files/figure-html/adjust-grn-1.png" alt="Adjusted poll average, Green 1st preferences" width="672" />
 <p class="caption">
-Adjusted poll average, Green 1st preferences
+Figure 4.3: Adjusted poll average, Green 1st preferences
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-adjust-grn-1">
-Past versions of adjust-grn-1.png
-</button>
-</p>
-<div id="fig-adjust-grn-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/adjust-grn-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="figure" style="text-align: center">
-<img src="figure/index.Rmd/adjust-lnp-2pp-1.png" alt="Adjusted poll average, LNP two-party preferred" width="672" />
+<div class="figure"><span style="display:block;" id="fig:adjust-lnp-2pp"></span>
+<img src="index_files/figure-html/adjust-lnp-2pp-1.png" alt="Adjusted poll average, LNP two-party preferred" width="672" />
 <p class="caption">
-Adjusted poll average, LNP two-party preferred
+Figure 4.4: Adjusted poll average, LNP two-party preferred
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-adjust-lnp-2pp-1">
-Past versions of adjust-lnp-2pp-1.png
-</button>
-</p>
-<div id="fig-adjust-lnp-2pp-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/simonjackman/poll_averaging_aus_2022/blob/be009ede2811f35f101421206affee54373f7e29/docs/figure/index.Rmd/adjust-lnp-2pp-1.png" target="_blank">be009ed</a>
-</td>
-<td>
-simonjackman
-</td>
-<td>
-2022-05-20
-</td>
-</tr>
-</tbody>
-</table>
 </div>
-</div>
-</div>
-<div id="appendix" class="section level1">
-<h1>Appendix</h1>
-<p>Each poll <span class="math inline">\(p \in 1, \ldots, P\)</span> is
-fielded on day <span class="math inline">\(t(p)\)</span> by polling firm
+<div id="appendix" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Appendix</h1>
+<p>Each poll <span class="math inline">\(p \in 1, \ldots, P\)</span> is fielded on day <span class="math inline">\(t(p)\)</span> by polling firm
 (“house”) <span class="math inline">\(j(p)\)</span>.</p>
-<p>Each poll for each party (not indexed here for clarity) yields a
-proportion <span class="math inline">\(y_p\)</span> and a sample size
-<span class="math inline">\(n_p\)</span>.</p>
-<p>Polls are modelled as <span class="math inline">\(y_p \sim N(\mu_p,
-s_p^2)\)</span>:</p>
+<p>Each poll for each party (not indexed here for clarity) yields a proportion
+<span class="math inline">\(y_p\)</span> and a sample size <span class="math inline">\(n_p\)</span>.</p>
+<p>Polls are modelled as <span class="math inline">\(y_p \sim N(\mu_p, s_p^2)\)</span>:</p>
 <ul>
-<li><p><span class="math inline">\(\mu_p = \xi_{t(p)} +
-\delta_{j(p)}\)</span>,</p></li>
-<li><p><span class="math inline">\(\xi_t\)</span> the underlying level
-of support for the party in question on day <span
-class="math inline">\(t\)</span>.</p></li>
-<li><p><span class="math inline">\(\delta_j\)</span> is a bias term
-(“house effect”) for polling firm <span
-class="math inline">\(j\)</span>.</p></li>
-<li><p><span class="math inline">\(s_p^2 = y_p (1 - y_p)/n_p\)</span> is
-an approximation to the sampling variability of <span
-class="math inline">\(y_p\)</span>.</p></li>
+<li><p><span class="math inline">\(\mu_p = \xi_{t(p)} + \delta_{j(p)}\)</span>,</p></li>
+<li><p><span class="math inline">\(\xi_t\)</span> the underlying level of support for the party in question on day
+<span class="math inline">\(t\)</span>.</p></li>
+<li><p><span class="math inline">\(\delta_j\)</span> is a bias term (“house effect”) for polling firm <span class="math inline">\(j\)</span>.</p></li>
+<li><p><span class="math inline">\(s_p^2 = y_p (1 - y_p)/n_p\)</span> is an approximation to the sampling variability
+of <span class="math inline">\(y_p\)</span>.</p></li>
 </ul>
-<p>Underlying levels of support evolve according to a “locally constant”
-or Gaussian random walk, <span class="math inline">\(\xi_t \sim
-N(\xi_{t-1}, \omega^2)\)</span> where</p>
+<p>Underlying levels of support evolve according to a “locally constant” or
+Gaussian random walk, <span class="math inline">\(\xi_t \sim N(\xi_{t-1}, \omega^2)\)</span> where</p>
 <ul>
-<li><p><span class="math inline">\(\omega^2\)</span> is the variance of
-day-to-day innovations in underlying voting intentions</p></li>
-<li><p><span class="math inline">\(\xi_1\)</span> is observed, the level
-of support for the political party in question on day <span
-class="math inline">\(t=1\)</span>, the day of the last
-election.</p></li>
+<li><p><span class="math inline">\(\omega^2\)</span> is the variance of day-to-day innovations in underlying voting intentions</p></li>
+<li><p><span class="math inline">\(\xi_1\)</span> is observed, the level of support for the political party in question on
+day <span class="math inline">\(t=1\)</span>, the day of the last election.</p></li>
 </ul>
 <p>In summary:</p>
 <ul>
-<li><p>Observed: <span class="math inline">\(y_p, n_p,
-\xi_1\)</span>.</p></li>
-<li><p>Unknowns: <span class="math inline">\(\xi_2, \ldots, \xi_T,
-\omega^2, \delta_j\)</span>.</p></li>
+<li><p>Observed: <span class="math inline">\(y_p, n_p, \xi_1\)</span>.</p></li>
+<li><p>Unknowns: <span class="math inline">\(\xi_2, \ldots, \xi_T, \omega^2, \delta_j\)</span>.</p></li>
 </ul>
-<p>We impose the normalising assumption <span
-class="math inline">\(\sum_j \delta_j = 0\)</span>, an assumption that
+<p>We impose the normalising assumption <span class="math inline">\(\sum_j \delta_j = 0\)</span>, an assumption that
 the polls are collectively unbiased.</p>
-<p>We approach estimation and inference for the unknown model parameters
-in a Bayesian setting, using Markov chain Monte Carlo methods to explore
-the posterior density of the parameters given observables and the model
-structure.</p>
-<p>See <span class="citation">Jackman (2009)</span> and <span
-class="citation">Jackman (2005)</span> for additional details.</p>
+<p>We approach estimation and inference for the unknown model parameters in a
+Bayesian setting, using Markov chain Monte Carlo methods to explore the
+posterior density of the parameters given observables and the model structure.</p>
+<p>See <span class="citation">Jackman (2009)</span> and <span class="citation">Jackman (2005)</span> for additional details.</p>
 </div>
-<div id="references" class="section level1">
+<div id="references" class="section level1 unnumbered">
 <h1>References</h1>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-jackman2005" class="csl-entry">
-Jackman, Simon. 2005. <span>“Pooling the Polls over an Election
-Campaign.”</span> <em>Australian Journal of Political Science</em> 40
-(4): 499–517. <a
-href="https://doi.org/10.1080/10361140500302472">https://doi.org/10.1080/10361140500302472</a>.
+Jackman, Simon. 2005. <span>“Pooling the Polls over an Election Campaign.”</span> <em>Australian Journal of Political Science</em> 40 (4): 499–517. <a href="https://doi.org/10.1080/10361140500302472">https://doi.org/10.1080/10361140500302472</a>.
 </div>
 <div id="ref-jackmanBayesianAnalysisSocial2009" class="csl-entry">
-———. 2009. <em>Bayesian Analysis for the Social Sciences</em>. Wiley
-Series in Probability and Statistics. <span>Chichester, U.K</span>:
-<span>Wiley</span>.
+———. 2009. <em>Bayesian Analysis for the Social Sciences</em>. Wiley Series in Probability and Statistics. <span>Chichester, U.K</span>: <span>Wiley</span>.
 </div>
 <div id="ref-mansilloNationalPollingOther2020" class="csl-entry">
-Mansillo, Luke, and Simon Jackman. 2020. <span>“National Polling and
-Other Disasters.”</span> In <em>Morrison’s <span>Miracle</span>:
-<span>The</span> 2019 <span>Australian Federal Election</span></em>,
-edited by Marian Simms, Anika Gauja, and Marian Sawer.
-<span>Canberra</span>: <span>ANU Press</span>. <a
-href="https://doi.org/10.22459/MM.2020.07">https://doi.org/10.22459/MM.2020.07</a>.
+Mansillo, Luke, and Simon Jackman. 2020. <span>“National Polling and Other Disasters.”</span> In <em>Morrison’s <span>Miracle</span>: <span>The</span> 2019 <span>Australian Federal Election</span></em>, edited by Marian Simms, Anika Gauja, and Marian Sawer. <span>Canberra</span>: <span>ANU Press</span>. <a href="https://doi.org/10.22459/MM.2020.07">https://doi.org/10.22459/MM.2020.07</a>.
 </div>
 </div>
-<br>
-<p>
-<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-Session information
-</button>
-</p>
-<div id="workflowr-sessioninfo" class="collapse">
-<pre><code>R Under development (unstable) (2022-05-18 r82376)
-Platform: aarch64-apple-darwin21.5.0 (64-bit)
-Running under: macOS Monterey 12.4
-
-Matrix products: default
-BLAS/LAPACK: /opt/homebrew/Cellar/openblas/0.3.20/lib/libopenblasp-r0.3.20.dylib
-
-locale:
-[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
- [1] ggrepel_0.9.1   lubridate_1.8.0 modelr_0.1.8    mgcv_1.8-40    
- [5] nlme_3.1-157    DT_0.23         r2d3_0.2.6      fst_0.9.8      
- [9] here_1.0.1      forcats_0.5.1   stringr_1.4.0   dplyr_1.0.9    
-[13] purrr_0.3.4     readr_2.1.2     tidyr_1.2.0     tibble_3.1.7   
-[17] ggplot2_3.3.6   tidyverse_1.3.1 knitr_1.39      workflowr_1.7.0
-
-loaded via a namespace (and not attached):
- [1] tidyselect_1.1.2  viridisLite_0.4.0 farver_2.1.0      fastmap_1.1.0    
- [5] promises_1.2.0.1  reprex_2.0.1      digest_0.6.29     fstcore_0.9.12   
- [9] lifecycle_1.0.1   ellipsis_0.3.2    processx_3.5.3    magrittr_2.0.3   
-[13] compiler_4.3.0    rlang_1.0.2       sass_0.4.1        tools_4.3.0      
-[17] utf8_1.2.2        yaml_2.3.5        labeling_0.4.2    htmlwidgets_1.5.4
-[21] bit_4.0.4         xml2_1.3.3        withr_2.5.0       grid_4.3.0       
-[25] fansi_1.0.3       git2r_0.30.1      colorspace_2.0-3  scales_1.2.0     
-[29] cli_3.3.0         rmarkdown_2.14    crayon_1.5.1      generics_0.1.2   
-[33] rstudioapi_0.13   httr_1.4.3        tzdb_0.3.0        readxl_1.4.0     
-[37] DBI_1.1.2         splines_4.3.0     rvest_1.0.2       assertthat_0.2.1 
-[41] parallel_4.3.0    cellranger_1.1.0  vctrs_0.4.1       Matrix_1.4-1     
-[45] webshot_0.5.3     jsonlite_1.8.0    callr_3.7.0       hms_1.1.1        
-[49] bit64_4.0.5       archive_1.1.5     systemfonts_1.0.4 jquerylib_0.1.4  
-[53] glue_1.6.2        ps_1.7.0          stringi_1.7.6     gtable_0.3.0     
-[57] later_1.3.0       munsell_0.5.0     pillar_1.7.0      htmltools_0.5.2  
-[61] R6_2.5.1          dbplyr_2.1.1      rprojroot_2.0.3   vroom_1.5.7      
-[65] evaluate_0.15     kableExtra_1.3.4  lattice_0.20-45   haven_2.5.0      
-[69] highr_0.9         backports_1.4.1   broom_0.8.0       httpuv_1.6.5     
-[73] bslib_0.3.1       Rcpp_1.0.8.3      svglite_2.1.0     whisker_0.4      
-[77] xfun_0.31         fs_1.5.2          getPass_0.2-2     pkgconfig_2.0.3  </code></pre>
 </div>
-</div>
-
-
-<!-- Adjust MathJax settings so that all math formulae are shown using
-TeX fonts only; see
-https://docs.mathjax.org/en/latest/web/configuration.html. This will make
-the presentation more consistent at the cost of the webpage sometimes
-taking slightly longer to load. Note that this only works because the
-footer is added to webpages before the MathJax javascript. -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    "HTML-CSS": { availableFonts: ["TeX"] }
-  });
-</script>
-
 
 
 
