@@ -1,7 +1,7 @@
-name: "poll_averaging"
+name: poll_averaging
 output_dir: ../docs
 navbar:
-  title: "poll_averaging"
+  title: poll_averaging
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/simonjackman/poll_averaging_aus_2022
 output:
   workflowr::wflow_html:
     toc: yes
