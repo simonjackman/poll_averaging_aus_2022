@@ -14,8 +14,8 @@ navbar:
     text: Source code
     href: https://github.com/simonjackman/poll_averaging_aus_2022
 output:
-  workflowr::wflow_html:
+  bookdown::html_document2:
+    css: preamble.css
     toc: yes
     toc_float: yes
-    theme: cosmo
-    highlight: textmate
+    self-contained: yes
