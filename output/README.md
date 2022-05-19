@@ -1,3 +1,3 @@
 # Output
 
-Save processed data files here.
+RDS files contain output from Stan runs.
