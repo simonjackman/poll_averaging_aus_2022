@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Professor Simon Jackman" />
+
+<meta name="date" content="2022-05-20" />
+
+<title>Poll averages for the 2022 Australian election</title>
+
+<script src="site_libs/header-attrs/header-attrs.js"></script>
+<script src="site_libs/jquery/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui/jquery-ui.min.js"></script>
+<link href="site_libs/tocify/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify/jquery.tocify.js"></script>
+<script src="site_libs/navigation/tabsets.js"></script>
+<link href="site_libs/highlightjs/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs/highlight.js"></script>
+<script src="site_libs/kePrint/kePrint.js"></script>
+<link href="site_libs/lightable/lightable.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">poll_averaging</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Poll averages for the 2022 Australian
+election</h1>
+<h4 class="author">Professor Simon Jackman</h4>
+<h4 class="date">20 May 2022</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-05-20
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>poll_averaging/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220519code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20220519)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220519code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220519)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong2fef4b0">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 2fef4b0
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong2fef4b0"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 2fef4b0.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rproj.user/
+    Ignored:    data/.DS_Store
+    Ignored:    for_casey/
+    Ignored:    output/.DS_Store
+
+Untracked files:
+    Untracked:  R/
+    Untracked:  analysis/poll_averaging.bib
+    Untracked:  analysis/preamble.css
+    Untracked:  data/2007/
+    Untracked:  data/2010/
+    Untracked:  data/2013/
+    Untracked:  data/2016/
+    Untracked:  data/2019/
+    Untracked:  data/2022/
+    Untracked:  data/historic/
+    Untracked:  output/2007/
+    Untracked:  output/2010/
+    Untracked:  output/2013/
+    Untracked:  output/2016/
+    Untracked:  output/2019/
+    Untracked:  output/csv/
+    Untracked:  output/xi_ALP_2022-04-02_sum_to_zero.rds
+    Untracked:  output/xi_ALP_2022-04-14_sum_to_zero.rds
+    Untracked:  output/xi_ALP_2022-05-10_sum_to_zero.rds
+    Untracked:  output/xi_ALP_2022-05-18_sum_to_zero.rds
+    Untracked:  output/xi_GRN_2022-04-02_sum_to_zero.rds
+    Untracked:  output/xi_GRN_2022-04-14_sum_to_zero.rds
+    Untracked:  output/xi_GRN_2022-05-10_sum_to_zero.rds
+    Untracked:  output/xi_GRN_2022-05-18_sum_to_zero.rds
+    Untracked:  output/xi_LNP_2022-04-02_sum_to_zero.rds
+    Untracked:  output/xi_LNP_2022-04-14_sum_to_zero.rds
+    Untracked:  output/xi_LNP_2022-05-10_sum_to_zero.rds
+    Untracked:  output/xi_LNP_2022-05-18_sum_to_zero.rds
+    Untracked:  output/xi_LNP_2PP_2022-04-02_sum_to_zero.rds
+    Untracked:  output/xi_LNP_2PP_2022-04-14_sum_to_zero.rds
+    Untracked:  output/xi_LNP_2PP_2022-05-10_sum_to_zero.rds
+    Untracked:  output/xi_LNP_2PP_2022-05-18_sum_to_zero.rds
+    Untracked:  poll_averaging.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
+(<code>docs/index.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+2fef4b0
+</td>
+<td>
+simonjackman
+</td>
+<td>
+2022-05-20
+</td>
+<td>
+wflow_git_commit(all = TRUE)
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+9a23a0c
+</td>
+<td>
+simonjackman
+</td>
+<td>
+2022-05-19
+</td>
+<td>
+Start workflowr project.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<div id="summary" class="highlights">
+<ul>
+<li><p>I compute an average of publicly available opinion polls on
+voting intentions for elections to Australia’s House of Representatives
+on 21 May 2022.</p></li>
+<li><p>I then adjust the resulting estimated level of voting intention
+by the <em>error</em> in poll averages observed in recent Australian
+elections.</p></li>
+<li><p>Table @ref(tab:load-summary-table) shows that if national polls
+are carrying the error they exhibited in 2019, the election is closer to
+51/49 ALP/Coalition in two-party preferred terms.</p></li>
+<li><p>If the polls are carrying the average level of bias seen in the
+five previous elections (2007 to 2019), then the election is more likely
+53-47.</p></li>
+<li><p>It is extremely unlikely that the Coalition can form government
+with a national 2PP vote of 47%.</p></li>
+<li><p>The Coalition <em>did</em> form government in 1998 with 49% of
+the national 2PP.</p></li>
+</ul>
+</div>
+<p>Currently:</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Summary of poll averages and adjustments, computed 20 May 2022
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+ALP
+</th>
+<th style="text-align:right;">
+LNP
+</th>
+<th style="text-align:right;">
+GRN
+</th>
+<th style="text-align:right;">
+LNP_2PP
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Unadjusted poll average
+</td>
+<td style="text-align:right;">
+36.0
+</td>
+<td style="text-align:right;">
+35.4
+</td>
+<td style="text-align:right;">
+11.9
+</td>
+<td style="text-align:right;">
+46.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Correct for 2019 error
+</td>
+<td style="text-align:right;">
+34.4
+</td>
+<td style="text-align:right;">
+38.9
+</td>
+<td style="text-align:right;">
+11.8
+</td>
+<td style="text-align:right;">
+49.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Correct for average error
+</td>
+<td style="text-align:right;">
+35.4
+</td>
+<td style="text-align:right;">
+36.8
+</td>
+<td style="text-align:right;">
+11.0
+</td>
+<td style="text-align:right;">
+47.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Integrating uncertainty in average &amp; error
+</td>
+<td style="text-align:right;">
+35.9
+</td>
+<td style="text-align:right;">
+37.1
+</td>
+<td style="text-align:right;">
+11.1
+</td>
+<td style="text-align:right;">
+47.4
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="errors-in-poll-averages-australian-elections-2007-to-2019"
+class="section level1">
+<h1>Errors in poll averages, Australian elections 2007 to 2019</h1>
+<p>Averages of opinion polls figure prominently in commentary and
+prognostication about the upcoming Federal election. My work is being
+used by the ABC regularly, including on its flagship <em>Insiders</em>
+programme.</p>
+<p>By and large, 2019 pre-election polls — and averages of those polls —
+missed the mark. After vigorous introspection, and the formation of an
+Australian Polling Council, some polling firms have changed their
+methodology and methods of reporting. Polls fielded shortly before
+recent state elections were reasonably accurate, bolstering confidence
+that 2022 election polls will be more accurate than in 2019.</p>
+<p>We draw on analysis presented in summary form in <span
+class="citation">Mansillo and Jackman (2020)</span>, where a
+poll-averaging model was fit to Australian opinion polls fielded in the
+period 2007-2019.</p>
+<p>Details on the poll averaging model and fitting it to published
+polling data appear in the Appendix.</p>
+<p>Figure @ref(fig:load-older-runs) shows the performance of poll
+averages in five previous elections: 2007, 2010, 2013, 2016 and 2019,
+graphing the error of the poll average computed over time until the
+election. Error is defined as poll average minus the actual election
+result, so that</p>
+<ul>
+<li><p>positive errors mean the polls are <em>over-estimates</em> of a
+party’s actual level of support, or that the polls are collectively
+<em>biased upwards</em> with respect to that party</p></li>
+<li><p>conversely, negative errors mean the polls are
+<em>under-estimates</em> of a party’s actual level of support, or that
+the polls are collectively <em>biased downwards</em> with respect to
+that party</p></li>
+</ul>
+<p>Since the poll average can be updated daily (even if the absence of
+new polls), we compute and plot errors in the poll average as daily time
+series in Figure @ref(fig:load-older-runs). 2019 poll error is
+highlighted in orange, while the blue line displays the average of the
+poll errors on a particular day for each party, averaging over the five
+elections (2007 to 2019, inclusive). The graph zooms in on the sixty
+days prior to each election.</p>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/load-older-runs-1.png" alt="Errors in poll averages, by party, year and days until election, 2007, 2010, 2013, 2016 and 2019." width="864" />
+<p class="caption">
+Errors in poll averages, by party, year and days until election, 2007,
+2010, 2013, 2016 and 2019.
+</p>
+</div>
+<p><br></p>
+<p>First, the good news:</p>
+<ul>
+<li><p>as the election gets closer, poll averages perform better, with
+errors getting smaller, with the possible exception of estimates of vote
+shares for the Greens.</p></li>
+<li><p>by Election Day, the average error of the poll averages is
+generally small, ranging from 0.5 for the Labor Party’s primary vote
+share to -1.3 for the Coalition’s share of the two-party preferred vote;
+see Table @ref(tab:error-final).</p></li>
+<li><p>the party winning the two-party preferred vote almost always
+forms government: rare exceptions are 1998 and 1990. Between 2007 and
+2019, poll averages of the two-party preferred result have picked the
+election winner correctly, save in 2019. In 2010 the polls
+under-estimated the Coalition’s performance by a sizeable margin with a
+poll average of 48.1% versus the actual result of 49.9% and 73 of 150
+seats.</p></li>
+</ul>
+<p><br></p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+Election Day error of poll averages, 2007 to 2019 and average.
+Positive/negative errors = polls are over/under estimates of party
+support.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+year
+</th>
+<th style="text-align:right;">
+ALP
+</th>
+<th style="text-align:right;">
+LNP
+</th>
+<th style="text-align:right;">
+GRN
+</th>
+<th style="text-align:right;">
+OTH
+</th>
+<th style="text-align:right;">
+LNP2PP
+</th>
+<th style="text-align:right;">
+actual
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2007
+</td>
+<td style="text-align:right;">
+1.7
+</td>
+<td style="text-align:right;">
+-1.0
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+-1.4
+</td>
+<td style="text-align:right;">
+-1.6
+</td>
+<td style="text-align:right;">
+47.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2010
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+<td style="text-align:right;">
+-1.5
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+<td style="text-align:right;">
+-0.3
+</td>
+<td style="text-align:right;">
+-1.7
+</td>
+<td style="text-align:right;">
+49.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2013
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+<td style="text-align:right;">
+-1.2
+</td>
+<td style="text-align:right;">
+1.5
+</td>
+<td style="text-align:right;">
+-0.8
+</td>
+<td style="text-align:right;">
+-0.7
+</td>
+<td style="text-align:right;">
+53.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2016
+</td>
+<td style="text-align:right;">
+-1.6
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+<td style="text-align:right;">
+-0.1
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+<td style="text-align:right;">
+50.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2019
+</td>
+<td style="text-align:right;">
+1.6
+</td>
+<td style="text-align:right;">
+-3.6
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+-2.5
+</td>
+<td style="text-align:right;">
+51.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Average
+</td>
+<td style="text-align:right;font-weight: bold;">
+0.6
+</td>
+<td style="text-align:right;font-weight: bold;">
+-1.4
+</td>
+<td style="text-align:right;font-weight: bold;">
+0.9
+</td>
+<td style="text-align:right;font-weight: bold;">
+-0.1
+</td>
+<td style="text-align:right;font-weight: bold;">
+-1.2
+</td>
+<td style="text-align:right;font-weight: bold;">
+</td>
+</tr>
+</tbody>
+</table>
+<p>The less good news:</p>
+<ul>
+<li><p>Australian polls exhibits biases that persist over decades. ALP
+and Green 1st preferences are typically over-estimated, while Coalition
+and “Other” are usually under-estimated by poll averages.</p></li>
+<li><p>Unsurprisingly then, poll averages typically underestimate the
+Coalition’s share of the two-party preferred vote, by an average of 1.1
+percentage points.</p></li>
+<li><p>The poll errors of 2019 are large both in absolute terms and
+relative to errors in other elections. The underestimate of the
+Coalition’s first preference vote share, 3.6 percentage points, has a
+magnitude more than twice that seen in the four previous elections for
+either major party. The 2.5 percentage point miss on the two-party
+preferred vote in 2019 was more than twice the average magnitude of the
+errors in the earlier elections.</p></li>
+</ul>
+<p><br></p>
+</div>
+<div id="poll-averages-for-2022-the-story-so-far"
+class="section level1">
+<h1>Poll averages for 2022: the story so far</h1>
+<p>What does this past history with respect to the errors in poll
+averages imply for the poll averages constructed from the 2022 data?</p>
+<p>We begin by presenting poll averages from the 2019-2022 election
+cycle, to date.</p>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/alp-plot-1.png" alt="ALP 1st preferences" width="864" />
+<p class="caption">
+ALP 1st preferences
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/lnp-plot-1.png" alt="LNP 1st preferences" width="864" />
+<p class="caption">
+LNP 1st preferences
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/grn-plot-1.png" alt="GRN 1st preferences" width="864" />
+<p class="caption">
+GRN 1st preferences
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/lnp-2pp-plot-1.png" alt="LNP two party preferred" width="864" />
+<p class="caption">
+LNP two party preferred
+</p>
+</div>
+<div id="zoom-in-with-2019-overlay" class="section level2">
+<h2>2022 zoom-in with 2019 overlay</h2>
+<p>We also zoom-in on calendar year 2022, overlaying the poll average
+from the same stage of the 2019 campaign.</p>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/alp-plot-zoom-1.png" alt="ALP 1st preferences, 2022" width="864" />
+<p class="caption">
+ALP 1st preferences, 2022
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/lnp-plot-zoom-1.png" alt="LNP 1st preferences, 2022" width="864" />
+<p class="caption">
+LNP 1st preferences, 2022
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/grn-plot-zoom-1.png" alt="GRN 1st preferences, 2022" width="864" />
+<p class="caption">
+GRN 1st preferences, 2022
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/lnp-2pp-plot-zoom-1.png" alt="LNP two party preferred, 2022" width="864" />
+<p class="caption">
+LNP two party preferred, 2022
+</p>
+</div>
+</div>
+</div>
+<div id="adjusting-2022-poll-averages-given-errors-in-past-years"
+class="section level1">
+<h1>Adjusting 2022 poll averages given errors in past years</h1>
+<p>We consider three adjustments to the 2022 poll averages:</p>
+<ul>
+<li><p>day-specific 2019 error.</p></li>
+<li><p>day-specific average error, computed from poll averages 2007 to
+2019, inclusive.</p></li>
+<li><p>sampling from error distribution given errors listed in Table
+@ref(tab:error-final), subject to the constraint that there is a 20%
+chance of errors larger than the largest errors observed in previous
+elections.</p></li>
+</ul>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but
+it won’t be re-run if previous chunks it depends on are updated. If you
+need to use caching, it is highly recommended to also set
+<code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the
+file (in a chunk that is not cached). Alternatively, you can customize
+the option <code>dependson</code> for each individual chunk that is
+cached. Using either <code>autodep</code> or <code>dependson</code> will
+remove this warning. See the
+<a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/adjust-alp-1.png" alt="Adjusted poll average, ALP 1st preferences" width="672" />
+<p class="caption">
+Adjusted poll average, ALP 1st preferences
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/adjust-lnp-1.png" alt="Adjusted poll average, Coalition 1st preferences" width="672" />
+<p class="caption">
+Adjusted poll average, Coalition 1st preferences
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/adjust-grn-1.png" alt="Adjusted poll average, Green 1st preferences" width="672" />
+<p class="caption">
+Adjusted poll average, Green 1st preferences
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="figure/index.Rmd/adjust-lnp-2pp-1.png" alt="Adjusted poll average, LNP two-party preferred" width="672" />
+<p class="caption">
+Adjusted poll average, LNP two-party preferred
+</p>
+</div>
+</div>
+<div id="appendix" class="section level1">
+<h1>Appendix</h1>
+<p>Each poll <span class="math inline">\(p \in 1, \ldots, P\)</span> is
+fielded on day <span class="math inline">\(t(p)\)</span> by polling firm
+(“house”) <span class="math inline">\(j(p)\)</span>.</p>
+<p>Each poll for each party (not indexed here for clarity) yields a
+proportion <span class="math inline">\(y_p\)</span> and a sample size
+<span class="math inline">\(n_p\)</span>.</p>
+<p>Polls are modelled as <span class="math inline">\(y_p \sim N(\mu_p,
+s_p^2)\)</span>:</p>
+<ul>
+<li><p><span class="math inline">\(\mu_p = \xi_{t(p)} +
+\delta_{j(p)}\)</span>,</p></li>
+<li><p><span class="math inline">\(\xi_t\)</span> the underlying level
+of support for the party in question on day <span
+class="math inline">\(t\)</span>.</p></li>
+<li><p><span class="math inline">\(\delta_j\)</span> is a bias term
+(“house effect”) for polling firm <span
+class="math inline">\(j\)</span>.</p></li>
+<li><p><span class="math inline">\(s_p^2 = y_p (1 - y_p)/n_p\)</span> is
+an approximation to the sampling variability of <span
+class="math inline">\(y_p\)</span>.</p></li>
+</ul>
+<p>Underlying levels of support evolve according to a “locally constant”
+or Gaussian random walk, <span class="math inline">\(\xi_t \sim
+N(\xi_{t-1}, \omega^2)\)</span> where</p>
+<ul>
+<li><p><span class="math inline">\(\omega^2\)</span> is the variance of
+day-to-day innovations in underlying voting intentions</p></li>
+<li><p><span class="math inline">\(\xi_1\)</span> is observed, the level
+of support for the political party in question on day <span
+class="math inline">\(t=1\)</span>, the day of the last
+election.</p></li>
+</ul>
+<p>In summary:</p>
+<ul>
+<li><p>Observed: <span class="math inline">\(y_p, n_p,
+\xi_1\)</span>.</p></li>
+<li><p>Unknowns: <span class="math inline">\(\xi_2, \ldots, \xi_T,
+\omega^2, \delta_j\)</span>.</p></li>
+</ul>
+<p>We impose the normalising assumption <span
+class="math inline">\(\sum_j \delta_j = 0\)</span>, an assumption that
+the polls are collectively unbiased.</p>
+<p>We approach estimation and inference for the unknown model parameters
+in a Bayesian setting, using Markov chain Monte Carlo methods to explore
+the posterior density of the parameters given observables and the model
+structure.</p>
+<p>See <span class="citation">Jackman (2009)</span> and <span
+class="citation">Jackman (2005)</span> for additional details.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-jackman2005" class="csl-entry">
+Jackman, Simon. 2005. <span>“Pooling the Polls over an Election
+Campaign.”</span> <em>Australian Journal of Political Science</em> 40
+(4): 499–517. <a
+href="https://doi.org/10.1080/10361140500302472">https://doi.org/10.1080/10361140500302472</a>.
+</div>
+<div id="ref-jackmanBayesianAnalysisSocial2009" class="csl-entry">
+———. 2009. <em>Bayesian Analysis for the Social Sciences</em>. Wiley
+Series in Probability and Statistics. <span>Chichester, U.K</span>:
+<span>Wiley</span>.
+</div>
+<div id="ref-mansilloNationalPollingOther2020" class="csl-entry">
+Mansillo, Luke, and Simon Jackman. 2020. <span>“National Polling and
+Other Disasters.”</span> In <em>Morrison’s <span>Miracle</span>:
+<span>The</span> 2019 <span>Australian Federal Election</span></em>,
+edited by Marian Simms, Anika Gauja, and Marian Sawer.
+<span>Canberra</span>: <span>ANU Press</span>. <a
+href="https://doi.org/10.22459/MM.2020.07">https://doi.org/10.22459/MM.2020.07</a>.
+</div>
+</div>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre><code>R Under development (unstable) (2022-05-18 r82376)
+Platform: aarch64-apple-darwin21.5.0 (64-bit)
+Running under: macOS Monterey 12.4
+
+Matrix products: default
+BLAS/LAPACK: /opt/homebrew/Cellar/openblas/0.3.20/lib/libopenblasp-r0.3.20.dylib
+
+locale:
+[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ggrepel_0.9.1   lubridate_1.8.0 modelr_0.1.8    mgcv_1.8-40    
+ [5] nlme_3.1-157    DT_0.23         r2d3_0.2.6      fst_0.9.8      
+ [9] here_1.0.1      forcats_0.5.1   stringr_1.4.0   dplyr_1.0.9    
+[13] purrr_0.3.4     readr_2.1.2     tidyr_1.2.0     tibble_3.1.7   
+[17] ggplot2_3.3.6   tidyverse_1.3.1 knitr_1.39      workflowr_1.7.0
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.1.2  viridisLite_0.4.0 farver_2.1.0      fastmap_1.1.0    
+ [5] promises_1.2.0.1  reprex_2.0.1      digest_0.6.29     fstcore_0.9.12   
+ [9] lifecycle_1.0.1   ellipsis_0.3.2    processx_3.5.3    magrittr_2.0.3   
+[13] compiler_4.3.0    rlang_1.0.2       sass_0.4.1        tools_4.3.0      
+[17] utf8_1.2.2        yaml_2.3.5        labeling_0.4.2    htmlwidgets_1.5.4
+[21] bit_4.0.4         xml2_1.3.3        withr_2.5.0       grid_4.3.0       
+[25] fansi_1.0.3       git2r_0.30.1      colorspace_2.0-3  scales_1.2.0     
+[29] cli_3.3.0         rmarkdown_2.14    crayon_1.5.1      generics_0.1.2   
+[33] rstudioapi_0.13   httr_1.4.3        tzdb_0.3.0        readxl_1.4.0     
+[37] DBI_1.1.2         splines_4.3.0     rvest_1.0.2       assertthat_0.2.1 
+[41] parallel_4.3.0    cellranger_1.1.0  vctrs_0.4.1       Matrix_1.4-1     
+[45] webshot_0.5.3     jsonlite_1.8.0    callr_3.7.0       hms_1.1.1        
+[49] bit64_4.0.5       archive_1.1.5     systemfonts_1.0.4 jquerylib_0.1.4  
+[53] glue_1.6.2        codetools_0.2-18  ps_1.7.0          stringi_1.7.6    
+[57] gtable_0.3.0      later_1.3.0       munsell_0.5.0     pillar_1.7.0     
+[61] htmltools_0.5.2   R6_2.5.1          dbplyr_2.1.1      rprojroot_2.0.3  
+[65] vroom_1.5.7       evaluate_0.15     kableExtra_1.3.4  lattice_0.20-45  
+[69] haven_2.5.0       highr_0.9         backports_1.4.1   broom_0.8.0      
+[73] httpuv_1.6.5      bslib_0.3.1       Rcpp_1.0.8.3      svglite_2.1.0    
+[77] whisker_0.4       xfun_0.31         fs_1.5.2          getPass_0.2-2    
+[81] pkgconfig_2.0.3  </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
