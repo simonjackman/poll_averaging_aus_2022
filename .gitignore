@@ -9,3 +9,7 @@ analysis/*png
 analysis/*html
 analysis/*_cache
 analysis/site_libs
+for_casey
+R/from_casey.R
+R/common.R
+
