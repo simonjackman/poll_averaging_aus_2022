@@ -42,8 +42,6 @@ electionDates <- c("1996"=as.Date("1996/03/02"),
                    "2019"=as.Date("2019/05/18"),
                    "2022"=as.Date("2022/05/21"))
 
-load("/tmp/tab.RData")
-
 actual <- read_csv(file=here("data/historic/election_results.csv")) %>%
   mutate(date=as.Date(date,format="%d/%m/%y")) %>%
   mutate(year=strftime(date,format="%y")) %>%
@@ -79,7 +77,7 @@ actual <- read_csv(file=here("data/historic/election_results.csv")) %>%
 
 Currently:
 
-```{r load-summary-table}
+```{r load-summary-table,eval=file.exists("/tmp/tab.RData")}
 load("/tmp/tab.RData")
 tab <- bind_rows(tab,
                  actual %>% 
