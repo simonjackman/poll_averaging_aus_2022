@@ -58,16 +58,16 @@ actual <- read_csv(file=here("data/historic/election_results.csv")) %>%
 -   Averages of recent polls indicate the Coalition will win 46.5% of the
     two-party preferred (TPP) vote; see Table \@ref(tab:load-summary-table).
 
--   The Coalition's estimated first preference vote of 35.4% is 6 percentage
-    points down on 2019; Labor's first preference share is estimated at 36%, up
-    2.7 points from 2019 and the Greens are estimated to have 11.9% of first
-    preferences, up 1.5 points from 2019.
+-   The Coalition's estimated first preference vote of 35.8% is 5.6 percentage
+    points down on 2019; Labor's first preference share is estimated at 35.8%, up
+    2.5 points from 2019 and the Greens are estimated to have 12.0% of first
+    preferences, up 1.6 points from 2019.
 
 -   But if public, national polls are carrying the error they exhibited in 2019,
-    the election is closer to 51/49 ALP/Coalition (TPP).
+    the election is closer to 50.8-49.2 ALP/Coalition (TPP).
 
 -   If the polls are carrying the average level of bias seen in the five
-    previous elections (2007 to 2019), then the election is more likely 52.3% ALP TPP to the Coalition's 47.7%.
+    previous elections (2007 to 2019), then the election is more likely 52.1% ALP TPP to the Coalition's 47.9%.
 
 -   It is extremely unlikely that the Coalition can form government if it were
     to win 47% or less of the national TPP vote.
@@ -747,7 +747,7 @@ show_adjust("LNP_2PP")
 ```{r summary-adjust-tab}
 tab <- bind_rows(
   xi_adjust %>% 
-    filter(days_to_election==1 & type=="raw") %>%
+    filter(days_to_election==0 & type=="raw") %>%
     select(-adjust) %>%
     distinct() %>%
     mutate(adjust="Unadjusted poll average") %>%
@@ -755,7 +755,7 @@ tab <- bind_rows(
                 names_from = party,
                 values_from = mean),
   xi_adjust %>% 
-    filter(days_to_election==1 & type=="adjusted") %>% 
+    filter(days_to_election==0 & type=="adjusted") %>% 
     pivot_wider(id_cols=adjust,
                 names_from = party,
                 values_from = mean) %>%
@@ -844,7 +844,6 @@ datatable(d2022 %>%
           caption = "Poll data entering poll averaging model")  %>%
   formatRound(columns=c('ALP','LNP','GRN',"LNP_2PP"),1) %>%
   formatRound(columns="n_eff",0)
-```
 ```
 
 
