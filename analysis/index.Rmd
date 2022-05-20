@@ -43,23 +43,38 @@ electionDates <- c("1996"=as.Date("1996/03/02"),
                    "2022"=as.Date("2022/05/21"))
 
 load("/tmp/tab.RData")
+
+actual <- read_csv(file=here("data/historic/election_results.csv")) %>%
+  mutate(date=as.Date(date,format="%d/%m/%y")) %>%
+  mutate(year=strftime(date,format="%y")) %>%
+  filter(date==max(date)) %>%
+  rename(LNP_2PP=LNP2PP,ALP_2PP=ALP2PP) %>%
+  pivot_longer(cols=c("LNP","ALP","GRN","OTH","LNP_2PP","ALP_2PP"),
+               names_to = "what",
+               values_to = "y")
 ```
 
 # Summary
 
 ::: {#summary .highlights}
-- Averages of recent polls indicate the Coalition will win 46.5% of the two-party preferred (TPP) vote; see Table \@ref(tab:load-summary-table). 
+-   Averages of recent polls indicate the Coalition will win 46.5% of the
+    two-party preferred (TPP) vote; see Table \@ref(tab:load-summary-table).
 
-- The Coalition's estimated first preference vote of 35.4% is 6 percentage points down on 2019; Labor's first preference share is estimated at 36%, up 2.7 points from 2019 and the Greens are estimated to have 11.9% of first preferences, up 1.5 points from 2019.
-    
--  But if public, national polls are carrying the error they exhibited in 2019, the election is closer to 51/49 ALP/Coalition (TPP).
+-   The Coalition's estimated first preference vote of 35.4% is 6 percentage
+    points down on 2019; Labor's first preference share is estimated at 36%, up
+    2.7 points from 2019 and the Greens are estimated to have 11.9% of first
+    preferences, up 1.5 points from 2019.
 
-- If the polls are carrying the average level of bias seen in the five previous elections (2007 to 2019), then the election is more likely 53-47.
+-   But if public, national polls are carrying the error they exhibited in 2019,
+    the election is closer to 51/49 ALP/Coalition (TPP).
 
-- It is extremely unlikely that the Coalition can form government if it were to win 47% or less of the national TPP vote.
+-   If the polls are carrying the average level of bias seen in the five
+    previous elections (2007 to 2019), then the election is more likely 53-47.
 
-- The Coalition _did_ form government in 1998 with 49% of the national TPP.
+-   It is extremely unlikely that the Coalition can form government if it were
+    to win 47% or less of the national TPP vote.
 
+-   The Coalition *did* form government in 1998 with 49% of the national TPP.
 :::
 
 Currently:
@@ -67,6 +82,11 @@ Currently:
 ```{r load-summary-table}
 load("/tmp/tab.RData")
 names(tab)[1] <- ""
+tab <- bind_rows(tab,
+                 actual %>% 
+                   pivot_wider(id_cols=date,names_from = what,values_from = y) %>% 
+                   select(-date,-OTH,-ALP_2PP))
+
 kable(tab,
       caption = paste("Summary of poll averages and adjustments, computed",format(Sys.time(), '%e %B %Y')),
       digits=1,
@@ -738,6 +758,8 @@ save("tab",file="/tmp/tab.RData")
 
 # Appendix
 
+## Poll average model
+
 Each poll $p \in 1, \ldots, P$ is fielded on day $t(p)$ by polling firm
 ("house") $j(p)$.
 
@@ -759,10 +781,11 @@ Polls are modelled as $y_p \sim N(\mu_p, s_p^2)$:
 Underlying levels of support evolve according to a "locally constant" or
 Gaussian random walk, $\xi_t \sim N(\xi_{t-1}, \omega^2)$ where
 
-- $\omega^2$ is the variance of day-to-day innovations in underlying voting intentions
+-   $\omega^2$ is the variance of day-to-day innovations in underlying voting
+    intentions
 
-- $\xi_1$ is observed, the level of support for the political party in question on
-day $t=1$, the day of the last election.
+-   $\xi_1$ is observed, the level of support for the political party in
+    question on day $t=1$, the day of the last election.
 
 In summary:
 
@@ -778,5 +801,30 @@ Bayesian setting, using Markov chain Monte Carlo methods to explore the
 posterior density of the parameters given observables and the model structure.
 
 See @jackmanBayesianAnalysisSocial2009 and @jackman2005 for additional details.
+
+`R` and `stan` code appears in the [github
+archive](https://github.com/simonjackman/poll_averaging_aus_2022)
+for this project.
+
+## Data
+
+Poll data for 2022 used for this project is listed below.   The file [`R/process_poll_data.R`](https://github.com/simonjackman/poll_averaging_aus_2022/blob/main/R/process_poll_data.R) contains code for preparing published poll results for incorporation into the poll-average model and analysis, with adjustments for allocation of undecided percentages, the translation to two-party preferred estimates, missing effective sample sizes and so on.
+
+These data were collected by Casey Briggs and co-workers at the Australian Broadcasting Corporation.
+
+
+```{r list-data}
+datatable(d2022 %>% 
+            select(Pollster,Publisher,
+                   start=start_date,end=end_date,
+                   n_eff=EffectiveSampleSize,ALP,LNP,GRN,LNP_2PP) %>%
+            arrange(desc(end)),
+          rownames = FALSE,
+          caption = "Poll data entering poll averaging model")  %>%
+  formatRound(columns=c('ALP','LNP','GRN',"LNP_2PP"),1) %>%
+  formatRound(columns="n_eff",0)
+```
+```
+
 
 # References
