@@ -69,7 +69,7 @@ actual <- read_csv(file=here("data/historic/election_results.csv")) %>%
     the election is closer to 51/49 ALP/Coalition (TPP).
 
 -   If the polls are carrying the average level of bias seen in the five
-    previous elections (2007 to 2019), then the election is more likely 53-47.
+    previous elections (2007 to 2019), then the election is more likely 52.3% ALP TPP to the Coalition's 47.7%.
 
 -   It is extremely unlikely that the Coalition can form government if it were
     to win 47% or less of the national TPP vote.
@@ -81,18 +81,21 @@ Currently:
 
 ```{r load-summary-table}
 load("/tmp/tab.RData")
-names(tab)[1] <- ""
 tab <- bind_rows(tab,
                  actual %>% 
                    pivot_wider(id_cols=date,names_from = what,values_from = y) %>% 
-                   select(-date,-OTH,-ALP_2PP))
+                   mutate(adjust="2019 results") %>%
+                   select(-date,-OTH,-ALP_2PP)
+                 )
+
+names(tab)[1] <- ""
 
 kable(tab,
       caption = paste("Summary of poll averages and adjustments, computed",format(Sys.time(), '%e %B %Y')),
       digits=1,
       format="html") %>%
   kableExtra::row_spec(1:2,hline_after = TRUE) %>%
-  kableExtra::kable_styling(full_width = FALSE,
+  kableExtra::kable_styling(full_width = TRUE,
                             bootstrap_options = "basic")
 ```
 
@@ -383,6 +386,14 @@ inspect <- function(theParty,latest=TRUE,theDate=NULL,zoom=FALSE,overlay_2019=FA
   g <- g +   
     geom_ribbon(fill=gray(.85),alpha=.5) + 
     geom_line(size=3,color=thisCol) + 
+    geom_linerange(data=d2022,
+                   inherit.aes = FALSE,
+                   color=gray(.75),
+                   size=.5,
+                   alpha=.5,
+                   aes(xmin=start_date_2,
+                       xmax=end_date_2,
+                       y=get(theParty))) + 
     geom_point(data=d2022,
                inherit.aes=FALSE,
                aes(x=mid_date,y=get(theParty))) + 
@@ -815,11 +826,23 @@ These data were collected by Casey Briggs and co-workers at the Australian Broad
 
 ```{r list-data}
 datatable(d2022 %>% 
+            mutate(Publisher = if_else(is.na(OriginalStory),
+                                       Publisher,
+                                       paste0("<a target=_blank href='",
+                                              OriginalStory,
+                                              "'>",
+                                              Publisher,
+                                              "</a>")
+                                       )
+                   ) %>%
             select(Pollster,Publisher,
-                   start=start_date,end=end_date,
-                   n_eff=EffectiveSampleSize,ALP,LNP,GRN,LNP_2PP) %>%
+                   start=start_date_2,end=end_date_2,
+                   n_eff=EffectiveSampleSize,
+                   ALP,LNP,GRN,LNP_2PP) %>%
             arrange(desc(end)),
+          options=list(columnDefs=list(list(className = 'dt-left', targets=0:4))),
           rownames = FALSE,
+          escape=FALSE,
           caption = "Poll data entering poll averaging model")  %>%
   formatRound(columns=c('ALP','LNP','GRN',"LNP_2PP"),1) %>%
   formatRound(columns="n_eff",0)
