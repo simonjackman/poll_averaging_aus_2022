@@ -269,9 +269,9 @@ kable(tab %>%
 
 The less good news:
 
--   Australian polls exhibits biases that persist over decades. ALP and Green
+-   Australian polls exhibit biases that persist over decades. ALP and Green
     1st preferences are typically over-estimated, while Coalition and "Other"
-    are usually under-estimated by poll averages.
+    are usually under-estimated by averaging over public polls.
 
 -   Unsurprisingly then, poll averages typically underestimate the Coalition's
     share of the two-party preferred vote, by an average of 1.1 percentage
@@ -282,7 +282,7 @@ The less good news:
     preference vote share, 3.6 percentage points, has a magnitude more than
     twice that seen in the four previous elections for either major party. The
     2.5 percentage point miss on the two-party preferred vote in 2019 was more
-    than twice the average magnitude of the errors in the earlier elections.
+    than twice the average magnitude of the corresponding errors in the earlier elections.
 
 <br>
 
