@@ -10,8 +10,11 @@
 ## 2022-05-18 21:58:54
 ########################################################
 
+library(tidyverse)
+library(stringr)
+library(lubridate)
 
-d2022 <- read_csv(file="~/Downloads/PollingData-5.csv")
+d2022 <- readxl::read_xlsx("~/Downloads/PollingData-6.xlsx")
 
 ## ----warning=FALSE------------------------------------------------------------
 d2022 <- d2022 %>%
@@ -23,41 +26,151 @@ d2022 <- d2022 %>%
   mutate(Pollster = str_squish(Pollster))
 
 
-## -----------function to swap month and day if date is in format m/d/y---------------
-fixDateTransposed <- function(z){
-  require(lubridate)
-  m <- month(z)
-  y <- year(z)
-  d <- day(z)
-  badDates <- (m>5 & y==2022) | (z > Sys.Date() + 1) 
-  badDates <- replace_na(badDates,FALSE)
+## parseDateString
+parseDateString <- function(str){
+  require(stringr)
   
-  if(any(badDates)){
-    ## assume badDates have month and day transposed
-    print(z[badDates])
-    month(z[badDates]) <- d[badDates]
-    day(z[badDates]) <- m[badDates]
+  out <- NULL
+  if(is.na(str) | str==""){
+    return(NA_Date_)
   }
   
-  return(z)
+  print(str)
+  if(!grepl(str,pattern="/",fixed=TRUE)){
+    str <- strftime(
+        as.Date(as.numeric(str),
+                origin=as.Date("1899-12-30")
+                ),
+        format="%m/%d/%Y"
+        )
+    print(str)
+  }
+  z <- as.numeric(str_split(str,pattern="/",simplify = TRUE))
+  print(z)
+  if(z[1]>12){
+    ## this is d/m/y
+    out <- as.Date(str,format="%d/%m/%Y")
+  }
+  if(z[2]>12){
+    ## this is m/d/y
+    out <- as.Date(str,format="%m/%d/%Y")
+  }
+  
+  ## ambiguous, try this, hope for the best
+  if(is.null(out)){
+    out <- as.Date(str,format="%m/%d/%Y")
+  }
+  
+  return(out)
 }
 
 
 d2022 <- d2022 %>%
-  mutate(PublicationDate = as.Date(PublicationDate,format="%d/%m/%Y"),
-         start_date=as.Date(FieldedStart,format="%d/%m/%Y"),
-         end_date=as.Date(FieldedEnd,format="%d/%m/%Y"))
+  rowwise() %>%
+  mutate(PublicationDate = parseDateString(PublicationDate),
+         start_date=parseDateString(FieldedStart),
+         end_date=parseDateString(FieldedEnd))
+
+## absurdly long polls almost always a case of transposed dates
+d2022 <- d2022 %>% 
+  mutate(flag=difftime(end_date,start_date)>14 | 
+           end_date>Sys.Date() | 
+           start_date>Sys.Date() | 
+           start_date>end_date)
+
+tab <- d2022 %>%
+  select(Pollster,start_date,end_date,flag) %>% 
+  arrange(desc(flag))
+
+
+date_transpose <- function(z){
+  m <- month(z)
+  d <- day(z)
+  
+  if(d<13){
+    month(z) <- d
+    day(z) <- m
+    z_try <- as.Date(z,origin=as.Date("1970/01/01"))
+    z <- ifelse(z_try<Sys.Date(),z_try,z)
+  }
+  
+  if(class(z)!="Date"){
+    z <- as.Date(z,origin=as.Date("1970/01/01"))
+  }
+  return(z)
+}
+  
+## -----------function to swap month and day if date is in format m/d/y---------------
+fixDateTransposed <- function(start_date,end_date){
+  ## work through some cases
+  if(start_date>end_date & start_date>Sys.Date()){
+    ## transpose start_date
+    start_date <- date_transpose(start_date)
+  }
+  
+  if(start_date>Sys.Date() & end_date>Sys.Date()){
+    start_date <- date_transpose(start_date)
+    end_date <- date_transpose(end_date)
+  }
+  
+  if(end_date>Sys.Date()){
+    end_date <- date_transpose(end_date)
+  }
+  
+  if(difftime(end_date,start_date)>14 | start_date>end_date){
+    ## try to figure out which of the two dates is transposed
+    if(day(start_date)>12 & day(end_date)<13){
+      end_date <- date_transpose(end_date)
+    } else
+      if(day(start_date)<13 & day(end_date)>12){
+        start_date <- date_transpose(start_date)
+      }
+  }
+    
+  # transposing which one makes sense?
+  if(difftime(end_date,start_date)>14 | start_date>end_date){
+    start_tmp <- date_transpose(start_date)
+    end_tmp <- date_transpose(end_date)
+    if(difftime(end_tmp,start_date)<14 & start_date<end_tmp){
+      end_date <- end_tmp
+    } 
+    else
+      if(difftime(end_date,start_tmp)<14 & start_tmp<end_date){
+        start_date <- start_tmp
+      }
+    else 
+      if(difftime(end_tmp,start_tmp)<14 & start_tmp<end_tmp){
+        start_date <- start_tmp
+        end_date <- end_tmp
+      }
+  }
+  
+  out <- tibble(start_date_2=start_date,
+                end_date_2=end_date)
+  return(out)
+}
+
 
 ## fix weird/impossible dates
 d2022 <- d2022 %>%
-  mutate(PublicationDate = fixDateTransposed(PublicationDate),
-         start_date = fixDateTransposed(start_date),
-         end_date = fixDateTransposed(end_date)) %>%
-  mutate(mid_date = as.Date(floor((as.numeric(start_date)+as.numeric(end_date))/2),
-                            origin="1970/01/01")) %>%
-  mutate(ALP_2PP = ifelse(ALP_2PP<1,ALP_2PP*100,ALP_2PP),
-         LNP_2PP = ifelse(LNP_2PP<1,LNP_2PP*100,LNP_2PP)) 
+  mutate(m = map2(.x=start_date,.y=end_date,~fixDateTransposed(.x,.y))) %>%
+  unnest(m)
 
+tab <- d2022 %>% 
+  mutate(flag=difftime(end_date_2,start_date_2)>14 | 
+           end_date_2>Sys.Date() | 
+           start_date_2>Sys.Date() | 
+           start_date_2>end_date_2) %>%
+  select(Pollster,start_date,end_date,start_date_2,end_date_2) %>% 
+  arrange(desc(start_date_2))
+
+print(tab)
+
+d2022 <- d2022 %>%
+  mutate(mid_date = as.Date(floor((as.numeric(start_date_2)+as.numeric(end_date_2))/2),
+                            origin="1970/01/01")) %>%
+  mutate(ALP_2PP = if_else(ALP_2PP<1,ALP_2PP*100,ALP_2PP),
+         LNP_2PP = if_else(LNP_2PP<1,LNP_2PP*100,LNP_2PP)) 
 
 ## ----no fielddate-------------------------------------------------------------
 d2022 <- d2022 %>%
@@ -65,6 +178,8 @@ d2022 <- d2022 %>%
                            PublicationDate - 3,
                            mid_date),
          mid_date = as.Date(mid_date,origin="1970/01/01"))
+
+
 
 ## ----normalise primaries where they don't sum to 100--------------------------
 d2022 <- d2022 %>% 
