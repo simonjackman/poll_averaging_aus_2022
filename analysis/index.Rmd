@@ -511,7 +511,7 @@ inspect <-
         data = d2022,
         inherit.aes = FALSE,
         color = gray(.75),
-        size = .5,
+        linewidth = .5,
         alpha = .5,
         aes(
           xmin = start_date_2,
