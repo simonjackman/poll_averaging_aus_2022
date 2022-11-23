@@ -54,7 +54,7 @@ actual <- read_csv(file=here("data/historic/election_results.csv")) %>%
 
 # Summary
 
-::: {#summary .highlights}
+::: {#summary .highlights .nonumber}
 -   Averages of recent polls indicate the Coalition will win 46.5% of the
     two-party preferred (TPP) vote; see Table \@ref(tab:load-summary-table).
 
@@ -67,7 +67,7 @@ actual <- read_csv(file=here("data/historic/election_results.csv")) %>%
     the election is closer to 50.8-49.2 ALP/Coalition (TPP).
 
 -   If the polls are carrying the average level of bias seen in the five
-    previous elections (2007 to 2019), then the election is more likely 52.1% ALP TPP to the Coalition's 47.9%.
+    previous elections (2007 to 2019), then the election is more likely 52.1% ALP TPP to the Coalition's 47.9%. <span style="color: red;">UPDATE (post-election): these average-bias-adjustment results match the _actual_ election results.</span>
 
 -   It is extremely unlikely that the Coalition can form government if it were
     to win 47% or less of the national TPP vote.
@@ -75,24 +75,36 @@ actual <- read_csv(file=here("data/historic/election_results.csv")) %>%
 -   The Coalition *did* form government in 1998 with 49% of the national TPP.
 :::
 
-Currently:
+At the end of the campaign:
 
 ```{r load-summary-table,eval=file.exists("/tmp/tab.RData")}
 load("/tmp/tab.RData")
-tab <- bind_rows(tab,
-                 actual %>% 
-                   pivot_wider(id_cols=date,names_from = what,values_from = y) %>% 
-                   mutate(adjust="2019 results") %>%
-                   select(-date,-OTH,-ALP_2PP)
-                 )
+tab <- bind_rows(
+  tab,
+  actual %>%
+    pivot_wider(
+      id_cols = date,
+      names_from = what,
+      values_from = y
+    ) %>%
+    mutate(adjust = "2019 results") %>%
+    select(-date, -OTH, -ALP_2PP)
+)
 
 names(tab)[1] <- ""
 
-kable(tab,
-      caption = paste("Summary of poll averages and adjustments, computed",format(Sys.time(), '%e %B %Y')),
-      digits=1,
-      format="html") %>%
-  kableExtra::row_spec(1:2,hline_after = TRUE) %>%
+kable(
+  tab,
+  caption = paste(
+    "Summary of poll averages and adjustments, computed",
+    format(min(c(
+      Sys.time(), electionDates["2022"]
+    )), '%e %B %Y')
+  ),
+  digits = 1,
+  format = "html"
+) %>%
+  kableExtra::row_spec(1:2, hline_after = TRUE) %>%
   kableExtra::kable_styling(full_width = TRUE,
                             bootstrap_options = "basic")
 ```
@@ -138,26 +150,28 @@ party, averaging over the five elections (2007 to 2019, inclusive). The graph
 zooms in on the sixty days prior to each election.
 
 ```{r load-older-runs,message=FALSE,warning=FALSE,fig.width=9,fig.cap="Errors in poll averages, by party, year and days until election, 2007, 2010, 2013, 2016 and 2019."}
-getError <- function(y,p){
-   theFile <- here(paste0("output/",y,"/",p,"_","summary.RData"))
-   load(theFile)
-   out <- forCasey %>% 
-     filter(type=="Poll average") %>%
-     mutate(actual=thisElectionResult,
-            error = xi - actual,
-            days_to_election=-as.numeric(date - max(date)),
-            year=as.character(y),
-            party=p) %>%
-     select(xi,lo,up,actual,error,date,days_to_election,year,party)
-   return(out)
+getError <- function(y, p) {
+  theFile <- here(paste0("output/", y, "/", p, "_", "summary.RData"))
+  load(theFile)
+  out <- forCasey %>%
+    filter(type == "Poll average") %>%
+    mutate(
+      actual = thisElectionResult,
+      error = xi - actual,
+      days_to_election = -as.numeric(date - max(date)),
+      year = as.character(y),
+      party = p
+    ) %>%
+    select(xi, lo, up, actual, error, date, days_to_election, year, party)
+  return(out)
 }
 
 error <- list()
 counter <- 0
-for(y in c(2019,2016,2013,2010,2007)){
-  for(p in c("ALP","LNP","GRN","OTH","LNP2PP")){
+for(y in c(2019, 2016, 2013, 2010, 2007)) {
+  for (p in c("ALP", "LNP", "GRN", "OTH", "LNP2PP")) {
     counter <- counter + 1
-    error[[counter]] <- getError(y,p)
+    error[[counter]] <- getError(y, p)
   }
 }
 
@@ -165,13 +179,15 @@ library(mgcv)
 library(modelr)
 error <- bind_rows(error)
 m <- error %>%
-  group_by(party,days_to_election) %>%
-  summarise(error=mean(error)) %>%
+  group_by(party, days_to_election) %>%
+  summarise(error = mean(error)) %>%
   ungroup() %>%
-  mutate(year="Average")
+  mutate(year = "Average")
 
-error <- bind_rows(error,m) %>% arrange(year,party,days_to_election) 
-write_csv(error,file="/tmp/all_years.csv")
+error <-
+  bind_rows(error, m) %>% arrange(year, party, days_to_election)
+
+write_csv(error, file = "/tmp/all_years.csv")
 
 # error <- bind_rows(error,m) %>%
 #   mutate(y2019 = factor(
@@ -183,34 +199,54 @@ write_csv(error,file="/tmp/all_years.csv")
 #   ) %>%
 #   arrange(party,year,days_to_election)
 
-error <- error %>% 
+error <- error %>%
   mutate(y2019 = factor(
-    case_when(year=="2019" ~ "2019",
-              year=="Average" ~ "Average",
+    case_when(year == "2019" ~ "2019",
+              year == "Average" ~ "Average",
               TRUE ~ "Other"),
-    levels=c("2019","Average","Other")
-  )
-  )
+    levels = c("2019", "Average", "Other")
+    )
+    )
 
-ggplot(error %>% filter(days_to_election<60),
-       aes(x=days_to_election,y=error,
-           group=year,color=y2019)) + 
-  geom_line(size=1.25) + 
-  geom_hline(yintercept = 0) + 
-  #geom_smooth(data=error %>% 
+ggplot(
+  error %>% filter(days_to_election < 60),
+  aes(
+    x = days_to_election,
+    y = error,
+    group = year,
+    color = y2019
+  )
+) +
+  geom_line(linewidth = 1.25) +
+  geom_hline(yintercept = 0) +
+  #geom_smooth(data=error %>%
   #              mutate(y2019="Average",
   #                     y2019=factor(y2019)),
   #            inherit.aes = FALSE,
   #            aes(x=days_to_election,y=error,color=y2019),
   #            se=FALSE,
   #            method=mgcv::gam,
-  #            formula=y ~ s(x)) + 
-  scale_x_continuous("Days until election",trans="reverse",minor_breaks = NULL,breaks=c(0,15,30,45,60),limits = c(60,0)) + 
-  scale_y_continuous("Forecast error of poll average",minor_breaks = NULL,breaks=seq(-4,6,by=2)) + 
-  scale_color_manual("",values=c("2019"="orange","Other"=gray(.70),"Average"="blue")) +
-  facet_wrap(~party) + 
+  #            formula=y ~ s(x)) +
+  scale_x_continuous(
+    "Days until election",
+    trans = "reverse",
+    minor_breaks = NULL,
+    breaks = c(0, 15, 30, 45, 60),
+    limits = c(60, 0)
+  ) +
+  scale_y_continuous(
+    "Forecast error of poll average",
+    minor_breaks = NULL,
+    breaks = seq(-4, 6, by = 2)
+  ) +
+  scale_color_manual("", values = c(
+    "2019" = "orange",
+    "Other" = gray(.70),
+    "Average" = "blue"
+  )) +
+  facet_wrap( ~ party) +
   theme_minimal(base_family = "Avenir") +
-  theme(legend.position = c(.875,.125))
+  theme(legend.position = c(.875, .125))
 
 ```
 
@@ -237,31 +273,34 @@ First, the good news:
 <br>
 
 ```{r error-final}
-actual <- read_csv(file=here::here("data/historic/election_results.csv")) %>%
-  mutate(year=lubridate::year(as.Date(date,format="%d/%m/%y"))) %>%
-  filter(year>2006) %>%
-  mutate(year=as.character(year)) %>%
-  select(year,actual=LNP2PP)
+actual <-
+  read_csv(file = here::here("data/historic/election_results.csv")) %>%
+  mutate(year = lubridate::year(as.Date(date, format = "%d/%m/%y"))) %>%
+  filter(year > 2006) %>%
+  mutate(year = as.character(year)) %>%
+  select(year, actual = LNP2PP)
 
-tab <- error %>% 
-  filter(days_to_election==0) %>%
-  pivot_wider(id_cols=year,
-              names_from=party,
+tab <- error %>%
+  filter(days_to_election == 0) %>%
+  pivot_wider(id_cols = year,
+              names_from = party,
               values_from = error) %>%
-  left_join(actual,by="year") %>%
-  select(year,ALP,LNP,GRN,OTH,LNP2PP,actual)
+  left_join(actual, by = "year") %>%
+  select(year, ALP, LNP, GRN, OTH, LNP2PP, actual)
 
-kable(tab %>% 
-        mutate(
-          across(where(is.double),
-                      ~str_squish(sprintf(.x,fmt="%3.1f"))),
-          actual = if_else(actual=="NA","",actual)
-          ),
-      format="html",
-      align="lrrrrrr",
-      caption="Election Day error of poll averages, 2007 to 2019 and average.  Positive/negative errors = polls are over/under estimates of party support.") %>%
+kable(
+  tab %>%
+    mutate(
+      across(where(is.double),
+             ~ str_squish(sprintf(.x, fmt = "%3.1f"))),
+      actual = if_else(actual == "NA", "", actual)
+    ),
+  format = "html",
+  align = "lrrrrrr",
+  caption = "Election Day error of poll averages, 2007 to 2019 and average.  Positive/negative errors = polls are over/under estimates of party support."
+) %>%
   kableExtra::kable_styling(bootstrap_options = "striped") %>%
-  kableExtra::row_spec(row=6,bold=TRUE)
+  kableExtra::row_spec(row = 6, bold = TRUE)
                  
 ```
 
@@ -292,187 +331,272 @@ for the poll averages constructed from the 2022 data?
 We begin by presenting poll averages from the 2019-2022 election cycle, to date.
 
 ```{r}
-getCurrentState <- function(){
-  p <- c("ALP","LNP","GRN","LNP_2PP")
+getCurrentState <- function() {
+  p <- c("ALP", "LNP", "GRN", "LNP_2PP")
   out <- list()
-  for(theParty in p){
-    theFiles <- list.files(path=here("output"),
-                           pattern=paste("xi",theParty,sep="_"),
-                           full.names = TRUE)
-    if(!grepl(pattern="_2PP",theParty)){
-      theFiles <- theFiles[!grepl(pattern="_2PP",theFiles)]
+  for (theParty in p) {
+    theFiles <- list.files(
+      path = here("output"),
+      pattern = paste("xi", theParty, sep = "_"),
+      full.names = TRUE
+    )
+    if (!grepl(pattern = "_2PP", theParty)) {
+      theFiles <- theFiles[!grepl(pattern = "_2PP", theFiles)]
     }
     
     theTimes <- file.mtime(theFiles)
     theFile <- theFiles[which.max(theTimes)]
+    ##print(theFile)
     xi <- readRDS(theFile)
+    ##print(xi)
     out[[theParty]] <- xi
   }
   
-  out <- bind_rows(out,.id="party") %>%
-    filter(date==Sys.Date()) 
+  out <- bind_rows(out, .id = "party")
+  if(Sys.Date() > electionDates["2022"]){
+    out <- out %>% 
+      filter(date == max(date))
+  } else {
+    out <- out %>%
+      filter(date == Sys.Date())
+    }
+  
   return(out)
 }
 
 tab <- getCurrentState() %>%
-  select(party,mean,lo=`2.5%`,up=`97.5%`) %>%
-  pivot_longer(cols=c("mean","lo","up"),names_to="what",values_to = "x") %>%
-  mutate(x=x*100) %>%
-  pivot_wider(id_cols=party,names_from = what,values_from = x) %>%
-  mutate(mean=sprintf(mean,fmt="%3.1f")) %>%
-  mutate(ci = paste0("[",sprintf(lo,fmt="%3.1f")," - ",sprintf(up,fmt="%3.1f"),"]")) %>%
-  pivot_longer(cols=c("mean","ci"),
-               names_to = "what",
-               values_to = "Estimate") %>%
-  select(party,Estimate)
+  select(party, mean, lo = `2.5%`, up = `97.5%`) %>%
+  pivot_longer(
+    cols = c("mean", "lo", "up"),
+    names_to = "what",
+    values_to = "x"
+  ) %>%
+  mutate(x = x * 100) %>%
+  pivot_wider(id_cols = party,
+              names_from = what,
+              values_from = x) %>%
+  mutate(mean = sprintf(mean, fmt = "%3.1f")) %>%
+  mutate(ci = paste0(
+    "[",
+    sprintf(lo, fmt = "%3.1f"),
+    " - ",
+    sprintf(up, fmt = "%3.1f"),
+    "]"
+  )) %>%
+  pivot_longer(
+    cols = c("mean", "ci"),
+    names_to = "what",
+    values_to = "Estimate"
+  ) %>%
+  select(party, Estimate)
 
 ```
 
 ```{r load-and-plot,results='hide'}
 source(here("R/process_poll_data.R"))
 
-actual <- read_csv(file=here("data/historic/election_results.csv")) %>%
-  mutate(date=as.Date(date,format="%d/%m/%y")) %>%
-  mutate(year=strftime(date,format="%y")) %>%
-  filter(date==max(date)) %>%
-  rename(LNP_2PP=LNP2PP,ALP_2PP=ALP2PP) %>%
-  pivot_longer(cols=c("LNP","ALP","GRN","OTH","LNP_2PP","ALP_2PP"),
-               names_to = "what",
-               values_to = "y")
+actual <-
+  read_csv(file = here("data/historic/election_results.csv")) %>%
+  mutate(date = as.Date(date, format = "%d/%m/%y")) %>%
+  mutate(year = strftime(date, format = "%y")) %>%
+  filter(date == max(date)) %>%
+  rename(LNP_2PP = LNP2PP, ALP_2PP = ALP2PP) %>%
+  pivot_longer(
+    cols = c("LNP", "ALP", "GRN", "OTH", "LNP_2PP", "ALP_2PP"),
+    names_to = "what",
+    values_to = "y"
+  )
 
 
-get_xi <- function(theParty,latest=TRUE,theDate=NULL){
-  theFiles <- list.files(path=here("output"),
-                         pattern=paste("xi",theParty,sep="_"),
-                         full.names = TRUE)
-  if(!grepl(pattern="_2PP",theParty)){
-    theFiles <- theFiles[!grepl(pattern="_2PP",theFiles)]
+get_xi <- function(theParty,
+                   latest = TRUE,
+                   theDate = NULL) {
+  theFiles <- list.files(
+    path = here("output"),
+    pattern = paste("xi", theParty, sep = "_"),
+    full.names = TRUE
+  )
+  if (!grepl(pattern = "_2PP", theParty)) {
+    theFiles <- theFiles[!grepl(pattern = "_2PP", theFiles)]
   }
   
   theTimes <- file.mtime(theFiles)
-  if(latest){
-    xi <- readRDS(theFiles[which.max(theTimes)])
+  if (latest) {
+    f <- theFiles[which.max(theTimes)]
   } else {
-    xi <- readRDS(theFiles[grepl(pattern=theDate,theFiles)])
+    f <- theFiles[grepl(pattern = theDate, theFiles)]
   }
-
+  print(f)
+  
+  xi <- readRDS(f)
   return(xi)
 }
 
-inspect <- function(theParty,latest=TRUE,theDate=NULL,zoom=FALSE,overlay_2019=FALSE){
-  
-  xi <- get_xi(theParty,latest,theDate)
-  
-  colors <- tribble(
-    ~color, ~Party,
-    "#ed1b35", "ALP",
-    "#009de3", "LNP",
-    "darkgreen", "GRN",
-    "#ee4627", "OTH",
-    "#ed1b35", "ALP_2PP",
-    "#009de3", "LNP_2PP"
-  )
-  
-  thisCol <- colors %>% filter(Party==theParty) %>% pull(color)
-  election_2019_result <- actual %>% filter(what==theParty) %>% pull(y)
-  require(ggplot2)
-  g <- ggplot(xi,
-              aes(x=date,y=mean*100,
-                  ymin=`2.5%`*100,ymax=`97.5%`*100))
-  
-
-  g <- g +   
-    geom_ribbon(fill=gray(.85),alpha=.5) + 
-    geom_line(size=3,color=thisCol) + 
-    geom_linerange(data=d2022,
-                   inherit.aes = FALSE,
-                   color=gray(.75),
-                   size=.5,
-                   alpha=.5,
-                   aes(xmin=start_date_2,
-                       xmax=end_date_2,
-                       y=get(theParty))) + 
-    geom_point(data=d2022,
-               inherit.aes=FALSE,
-               aes(x=mid_date,y=get(theParty))) + 
-    geom_hline(yintercept=election_2019_result) + 
-    annotate("text",x=min(xi$date),
-             y=election_2019_result+.1,
-             label="2019 Result",
-             family="Avenir",
-             vjust=0,hjust=0) +
-    annotate("text",x=max(xi$date),
-             y=election_2019_result+.1,
-             label="2019 Result",
-             family="Avenir",
-             vjust=0,hjust=1) + 
-    scale_y_continuous("Voting intention",minor_breaks = NULL)
-  
-  
-   if(overlay_2019){
-    dateOffset <- difftime(as.Date(electionDates["2022"]),as.Date(electionDates["2019"]))
-    theFile <- here(paste0("output/2019/xi_",theParty,"_sum_to_zero.rds"))
-    if(grepl("2PP",theParty)){
-      theFile <- here(paste0("output/2019/xi_",str_remove(theParty,pattern="_"),"_sum_to_zero.rds"))
-    }
-    xi_2019 <- read_rds(file=theFile) %>%
-      mutate(date = date + dateOffset)
+inspect <-
+  function(theParty,
+           latest = TRUE,
+           theDate = NULL,
+           zoom = FALSE,
+           overlay_2019 = FALSE) {
+    xi <- get_xi(theParty, latest, theDate)
     
-    g <- g + 
-      geom_line(data=xi_2019,
-                inherit.aes = FALSE,
-                aes(x=date,y=mean*100)) + 
-      annotate("text",x=max(xi_2019$date),
-             y=xi_2019$mean[nrow(xi_2019)]*100+.1,
-             label="2019 Poll Average",
-             family="Avenir",
-             vjust=0,hjust=1)
-  }
-  
-  
-  if(zoom){
-    library(ggrepel)
-    g <- g + 
-      geom_text_repel(data=d2022,
-                      inherit.aes=FALSE,
-                      size=3,
-                      aes(x=mid_date,y=get(theParty),label=pollster_abbr),
-                      family="Avenir") + 
-      scale_x_date("",date_breaks = "1 month",
-                   expand=c(0,0),
-                   date_labels = "%b %y",
-                   minor_breaks = NULL,
-                   limits = c(as.Date("2022-01-01"),as.Date("2022-05-21"))) 
-  } else {
+    colors <- tribble(
+      ~ color, ~ Party,
+      "#ed1b35", "ALP",
+      "#009de3", "LNP",
+      "darkgreen", "GRN",
+      "#ee4627",
+      "OTH",
+      "#ed1b35",
+      "ALP_2PP",
+      "#009de3",
+      "LNP_2PP"
+    )
+    
+    thisCol <- colors %>% filter(Party == theParty) %>% pull(color)
+    election_2019_result <-
+      actual %>% filter(what == theParty) %>% pull(y)
+    require(ggplot2)
+    g <- ggplot(xi,
+                aes(
+                  x = date,
+                  y = mean * 100,
+                  ymin = `2.5%` * 100,
+                  ymax = `97.5%` * 100
+                ))
+    
+    
     g <- g +
-      scale_x_date("",
-                   date_breaks = "3 months",
-                   expand=c(0,0),
-                   date_labels = "%b %y",
-                   minor_breaks = NULL) 
+      geom_ribbon(fill = gray(.85), alpha = .5) +
+      geom_line(size = 3, color = thisCol) +
+      geom_linerange(
+        data = d2022,
+        inherit.aes = FALSE,
+        color = gray(.75),
+        size = .5,
+        alpha = .5,
+        aes(
+          xmin = start_date_2,
+          xmax = end_date_2,
+          y = get(theParty)
+        )
+      ) +
+      geom_point(data = d2022,
+                 inherit.aes = FALSE,
+                 aes(x = mid_date, y = get(theParty))) +
+      geom_hline(yintercept = election_2019_result) +
+      annotate(
+        "text",
+        x = min(xi$date),
+        y = election_2019_result + .1,
+        label = "2019 Result",
+        family = "Avenir",
+        vjust = 0,
+        hjust = 0
+      ) +
+      annotate(
+        "text",
+        x = max(xi$date),
+        y = election_2019_result + .1,
+        label = "2019 Result",
+        family = "Avenir",
+        vjust = 0,
+        hjust = 1
+      ) +
+      scale_y_continuous("Voting intention", minor_breaks = NULL)
+    
+    
+    if (overlay_2019) {
+      dateOffset <-
+        difftime(as.Date(electionDates["2022"]), as.Date(electionDates["2019"]))
+      theFile <-
+        here(paste0("output/2019/xi_", theParty, "_sum_to_zero.rds"))
+      if (grepl("2PP", theParty)) {
+        theFile <-
+          here(paste0(
+            "output/2019/xi_",
+            str_remove(theParty, pattern = "_"),
+            "_sum_to_zero.rds"
+          ))
+      }
+      xi_2019 <- read_rds(file = theFile) %>%
+        mutate(date = date + dateOffset)
+      
+      g <- g +
+        geom_line(data = xi_2019,
+                  inherit.aes = FALSE,
+                  aes(x = date, y = mean * 100)) +
+        annotate(
+          "text",
+          x = max(xi_2019$date),
+          y = xi_2019$mean[nrow(xi_2019)] * 100 + .1,
+          label = "2019 Poll Average",
+          family = "Avenir",
+          vjust = 0,
+          hjust = 1
+        )
+    }
+    
+    
+    if (zoom) {
+      library(ggrepel)
+      g <- g +
+        geom_text_repel(
+          data = d2022,
+          inherit.aes = FALSE,
+          size = 3,
+          aes(
+            x = mid_date,
+            y = get(theParty),
+            label = pollster_abbr
+          ),
+          family = "Avenir"
+        ) +
+        scale_x_date(
+          "",
+          date_breaks = "1 month",
+          expand = c(0, 0),
+          date_labels = "%b %y",
+          minor_breaks = NULL,
+          limits = c(as.Date("2022-01-01"), as.Date("2022-05-21"))
+        )
+    } else {
+      g <- g +
+        scale_x_date(
+          "",
+          date_breaks = "3 months",
+          expand = c(0, 0),
+          date_labels = "%b %y",
+          minor_breaks = NULL
+        )
+    }
+    g <- g +
+      theme_minimal(base_family = "Avenir")
+    
+    return(g)
   }
-  g <- g +
-    theme_minimal(base_family = "Avenir")
-  
-  return(g)
-}
 
 ## CONSTANTS
 electionDay_2019 <- as.Date("2019/05/18")
 electionDay_2022 <- as.Date("2022/05/21")
 
 ## previous election results, we only need 2019 here
-actual <- read_csv(file=here("data/historic/election_results.csv")) %>%
-  mutate(date=as.Date(date,format="%d/%m/%y")) %>%
-  mutate(year=strftime(date,format="%y")) %>%
-  filter(date==max(date)) %>%
-  rename(LNP_2PP=LNP2PP,ALP_2PP=ALP2PP) %>%
-  pivot_longer(cols=c("LNP","ALP","GRN","OTH","LNP_2PP","ALP_2PP"),
-               names_to = "what",
-               values_to = "y")
+actual <-
+  read_csv(file = here("data/historic/election_results.csv")) %>%
+  mutate(date = as.Date(date, format = "%d/%m/%y")) %>%
+  mutate(year = strftime(date, format = "%y")) %>%
+  filter(date == max(date)) %>%
+  rename(LNP_2PP = LNP2PP, ALP_2PP = ALP2PP) %>%
+  pivot_longer(
+    cols = c("LNP", "ALP", "GRN", "OTH", "LNP_2PP", "ALP_2PP"),
+    names_to = "what",
+    values_to = "y"
+  )
 
 ## date Sequence
-dateSeq <- seq.Date(from=electionDay_2019,to=electionDay_2022,by=1)
+dateSeq <- seq.Date(from = electionDay_2019,
+                    to = electionDay_2022,
+                    by = 1)
 ```
 
 ```{r,alp-plot,fig.width=9,fig.height=6,purl=FALSE,fig.cap="ALP 1st preferences"}
@@ -497,19 +621,19 @@ We also zoom-in on calendar year 2022, overlaying the poll average from the same
 stage of the 2019 campaign.
 
 ```{r alp-plot-zoom,fig.width=9,fig.height=6.5,fig.cap="ALP 1st preferences, 2022",echo=FALSE,message=FALSE,warning=FALSE}
-inspect("ALP",zoom=TRUE,overlay_2019=TRUE)
+inspect("ALP", zoom = TRUE, overlay_2019 = TRUE)
 ```
 
 ```{r lnp-plot-zoom,fig.width=9,fig.height=6.5,fig.cap="LNP 1st preferences, 2022",echo=FALSE,message=FALSE,warning=FALSE}
-inspect("LNP",zoom=TRUE,overlay_2019=TRUE)
+inspect("LNP", zoom = TRUE, overlay_2019 = TRUE)
 ```
 
 ```{r grn-plot-zoom,fig.width=9,fig.height=6.5,fig.cap="GRN 1st preferences, 2022",echo=FALSE,message=FALSE,warning=FALSE}
-inspect("GRN",zoom=TRUE,overlay_2019=TRUE)
+inspect("GRN", zoom = TRUE, overlay_2019 = TRUE)
 ```
 
 ```{r lnp-2pp-plot-zoom,fig.width=9,fig.height=6.5,fig.cap="LNP two party preferred, 2022",echo=FALSE,message=FALSE,warning=FALSE}
-inspect("LNP_2PP",zoom=TRUE,overlay_2019=TRUE)
+inspect("LNP_2PP", zoom = TRUE, overlay_2019 = TRUE)
 ```
 
 # Adjusting 2022 poll averages given errors in past years
@@ -526,164 +650,184 @@ We consider three adjustments to the 2022 poll averages:
     of errors larger than the largest errors observed in previous elections.
 
 ```{r,cache=TRUE}
-error <- read_csv(file="/tmp/all_years.csv") %>%
-  mutate(party=if_else(party=="LNP2PP","LNP_2PP",party))
+error <- read_csv(file = "/tmp/all_years.csv") %>%
+  mutate(party = if_else(party == "LNP2PP", "LNP_2PP", party))
 
-t_obj <- function(parm,target){
+t_obj <- function(parm, target) {
   df <- parm
-  out <- abs(abs(target) - qt(.95,df=df))
+  out <- abs(abs(target) - qt(.95, df = df))
   return(out)
 }
 
-get_t_distribution <- function(e){
+get_t_distribution <- function(e) {
   m <- mean(e)
   s <- sd(e)
-  e_star <- (e-m)/s
+  e_star <- (e - m) / s
   k <- max(abs(e_star))
   
-  df <- optimize(f=t_obj,target=k,interval=c(2,30))$minimum
-  return(list(m=m,s=s,df=df))
+  df <- optimize(f = t_obj,
+                 target = k,
+                 interval = c(2, 30))$minimum
+  return(list(m = m, s = s, df = df))
 }
 
-get_unif_errors <- function(obj){
-  if(any(is.na(obj))){
+get_unif_errors <- function(obj) {
+  if (any(is.na(obj))) {
     return(NULL)
   }
   e <- obj$error
   r <- max(e) - min(e)
-  lo <- min(e) - .1*r
-  up <- max(e) + .1*r
-  error <- runif(n=5000,lo,up)
+  lo <- min(e) - .1 * r
+  up <- max(e) + .1 * r
+  error <- runif(n = 5000, lo, up)
   return(error)
 }
 
-make_t_sims <- function(e){
+make_t_sims <- function(e) {
   n <- length(e)
-  if(n<3){
+  if (n < 3) {
     return(NULL)
   }
   theta <- get_t_distribution(e)
-  errors <- stats::rt(n=5000,df = theta$df)*theta$s + theta$m
+  errors <- stats::rt(n = 5000, df = theta$df) * theta$s + theta$m
   return(errors)
 }
 
-perturb_xi <- function(xi){
+perturb_xi <- function(xi) {
   out <- xi %>%
-    left_join(error %>% 
-                select(error,days_to_election,party,year) %>%
-                filter(year!="Average" & party %in% xi$party) %>%
-                select(-party),
-              by=c("days_to_election"))
+    left_join(
+      error %>%
+        select(error, days_to_election, party, year) %>%
+        filter(year != "Average" & party %in% xi$party) %>%
+        select(-party),
+      by = c("days_to_election")
+    )
   
   out <- out %>%
-    group_nest(days_to_election,keep=TRUE) %>%
-    mutate(error = map(.x=data,~get_unif_errors(.x))) %>%
+    group_nest(days_to_election, keep = TRUE) %>%
+    mutate(error = map(.x = data,  ~ get_unif_errors(.x))) %>%
     ungroup() %>%
     unnest(error) %>%
     select(-data)
   
-  out <- inner_join(xi,out,by="days_to_election") %>%
+  out <- inner_join(xi, out, by = "days_to_election") %>%
     mutate(mean_adjust = mean - error) %>%
     group_by(days_to_election) %>%
-    summarise(date=date[1],
-              mean=mean[1],
-              lo=lo[1],
-              up=up[1],
-              party=gsub(party,pattern="_",replacement="")[1],
-              mean_adjust_lo = quantile(mean_adjust,.025),
-              mean_adjust_up = quantile(mean_adjust,.975),              
-              mean_adjust= mean(mean_adjust)) %>%
+    summarise(
+      date = date[1],
+      mean = mean[1],
+      lo = lo[1],
+      up = up[1],
+      party = gsub(party, pattern = "_", replacement = "")[1],
+      mean_adjust_lo = quantile(mean_adjust, .025),
+      mean_adjust_up = quantile(mean_adjust, .975),
+      mean_adjust = mean(mean_adjust)
+    ) %>%
     ungroup()
   
   return(out)
 }
 
-adjust <- function(theParty,adjust=c("average","2019_end","sampling")){
-  xi <- get_xi(theParty,latest=TRUE,theDate=NULL) %>% 
-    select(-n_eff,-Rhat) %>%
-    rename(lo=`2.5%`,up=`97.5%`) %>%
-    mutate(across(where(function(x)is.double(x) & !is.Date(x)),~.x*100)) %>%
-    mutate(days_to_election = as.numeric(base::difftime(as.Date("2022-05-21"),
-                                             as.Date(date),
-                                             units = "day"))) %>%
-    mutate(party=theParty)
+adjust <-
+  function(theParty,
+           adjust = c("average", "2019_end", "sampling")) {
+    xi <- get_xi(theParty, latest = TRUE, theDate = NULL) %>%
+      select(-n_eff, -Rhat) %>%
+      rename(lo = `2.5%`, up = `97.5%`) %>%
+      mutate(across(where(function(x)
+        is.double(x) & !is.Date(x)),  ~ .x * 100)) %>%
+      mutate(days_to_election = as.numeric(base::difftime(
+        as.Date("2022-05-21"),
+        as.Date(date),
+        units = "day"
+      ))) %>%
+      mutate(party = theParty)
     
-    if(adjust=="average"){
-      xi <- left_join(xi,
-                      error %>% 
-                        filter(year=="Average") %>%
-                        select(party,error,days_to_election),
-                      by=c("party","days_to_election")
-                      ) %>%
-        mutate(mean_adjust = mean - error,
-               mean_adjust_lo = lo - error,
-               mean_adjust_up = up - error)
-        
+    if (adjust == "average") {
+      xi <- left_join(
+        xi,
+        error %>%
+          filter(year == "Average") %>%
+          select(party, error, days_to_election),
+        by = c("party", "days_to_election")
+      ) %>%
+        mutate(
+          mean_adjust = mean - error,
+          mean_adjust_lo = lo - error,
+          mean_adjust_up = up - error
+        )
+      
     }
-  
-    if(adjust=="2019_end"){
-       xi <- left_join(xi,
-                      error %>% 
-                        filter(year=="2019") %>%
-                        select(party,error,days_to_election),
-                      by=c("party","days_to_election")
-                      ) %>%
-        mutate(mean_adjust = mean - error,
-               mean_adjust_lo = lo - error,
-               mean_adjust_up = up - error)
+    
+    if (adjust == "2019_end") {
+      xi <- left_join(
+        xi,
+        error %>%
+          filter(year == "2019") %>%
+          select(party, error, days_to_election),
+        by = c("party", "days_to_election")
+      ) %>%
+        mutate(
+          mean_adjust = mean - error,
+          mean_adjust_lo = lo - error,
+          mean_adjust_up = up - error
+        )
     }
-  
-    if(adjust=="sampling"){
+    
+    if (adjust == "sampling") {
       xi <- perturb_xi(xi)
     }
-  
-  out <- xi %>% mutate(adjust=adjust)
-  
-  out <- bind_rows(
-    out %>% 
-      rename(mean_lo=lo,mean_up=up) %>% 
-      select(date,days_to_election,party,
-             mean,mean_lo,mean_up,adjust) %>% 
-      mutate(type='raw'),
-    out %>% 
-      select(date,days_to_election,party,
-             contains("_adjust"),
-             adjust) %>%
-      rename(mean=mean_adjust,
-             mean_lo=mean_adjust_lo,
-             mean_up=mean_adjust_up)  %>% 
-      mutate(type='adjusted')
-  )
-  
-  return(out)
-}
+    
+    out <- xi %>% mutate(adjust = adjust)
+    
+    out <- bind_rows(
+      out %>%
+        rename(mean_lo = lo, mean_up = up) %>%
+        select(date, days_to_election, party,
+               mean, mean_lo, mean_up, adjust) %>%
+        mutate(type = 'raw'),
+      out %>%
+        select(date, days_to_election, party,
+               contains("_adjust"),
+               adjust) %>%
+        rename(
+          mean = mean_adjust,
+          mean_lo = mean_adjust_lo,
+          mean_up = mean_adjust_up
+        )  %>%
+        mutate(type = 'adjusted')
+    )
+    
+    return(out)
+  }
 
 xi_adjust <- list()
 counter <- 0
-for(p in c("ALP","LNP","GRN","LNP_2PP")){
-  for(adj in c("average","2019_end","sampling")){
+for (p in c("ALP", "LNP", "GRN", "LNP_2PP")) {
+  for (adj in c("average", "2019_end", "sampling")) {
     ##cat(paste(p,adj,"\n"))
     counter <- counter + 1
-    xi_adjust[[counter]] <- adjust(p,adj)
+    xi_adjust[[counter]] <- adjust(p, adj)
   }
 }
 
 xi_adjust <- bind_rows(xi_adjust) %>%
-  mutate(party=if_else(party=="LNP2PP","LNP_2PP",party)) %>%
-  mutate(adjust = factor(adjust,
-                         levels=c("2019_end","average","sampling"),
-                         labels=c("Correct for 2019 error",
-                                  "Correct for average error",
-                                  "Integrating uncertainty\nin average & error")
-                         )
-  )
+  mutate(party = if_else(party == "LNP2PP", "LNP_2PP", party)) %>%
+  mutate(adjust = factor(
+    adjust,
+    levels = c("2019_end", "average", "sampling"),
+    labels = c(
+      "Correct for 2019 error",
+      "Correct for average error",
+      "Integrating uncertainty\nin average & error"
+    )
+  ))
 ```
 
 ```{r show-adjust}
-show_adjust <- function(theParty){
-  
+show_adjust <- function(theParty) {
   colors <- tribble(
-    ~color, ~Party,
+    ~ color, ~ Party,
     "#ed1b35", "ALP",
     "#009de3", "LNP",
     "darkgreen", "GRN",
@@ -692,36 +836,42 @@ show_adjust <- function(theParty){
     "#009de3", "LNP_2PP"
   )
   
-  theColor <- colors %>% filter(Party==theParty) %>% pull(color)
+  theColor <- colors %>% filter(Party == theParty) %>% pull(color)
   ##print(theParty)
   ##print(theColor)
   
-  g <- ggplot(data=xi_adjust %>% 
-                filter(days_to_election<46) %>% 
-                filter(party==theParty),
-              aes(x=days_to_election,
-                  y=mean,
-                  ymin=mean_lo,
-                  ymax=mean_up,
-                  group=type,
-                  fill=type,
-                  color=type)
-              ) + 
-    geom_ribbon(alpha=.35,show.legend = FALSE,color="transparent") + 
-    geom_line(size=1.25,show.legend = TRUE) +
-    scale_fill_manual("",
-                      values=c("raw"=gray(.5),
-                               "adjusted"=theColor),
-                      aesthetics = c("fill","color")
-                      ) + 
-    scale_x_reverse("Days to election",minor_breaks=NULL) + 
-    scale_y_continuous("",minor_breaks = NULL) +
-    facet_grid(cols=vars(adjust)) + 
-    theme_minimal(base_family = "Avenir") + 
+  g <- ggplot(
+    data = xi_adjust %>%
+      filter(days_to_election < 46) %>%
+      filter(party == theParty),
+    aes(
+      x = days_to_election,
+      y = mean,
+      ymin = mean_lo,
+      ymax = mean_up,
+      group = type,
+      fill = type,
+      color = type
+    )
+  ) +
+    geom_ribbon(alpha = .35,
+                show.legend = FALSE,
+                color = "transparent") +
+    geom_line(size = 1.25, show.legend = TRUE) +
+    scale_fill_manual(
+      "",
+      values = c("raw" = gray(.5),
+                 "adjusted" = theColor),
+      aesthetics = c("fill", "color")
+    ) +
+    scale_x_reverse("Days to election", minor_breaks = NULL) +
+    scale_y_continuous("", minor_breaks = NULL) +
+    facet_grid(cols = vars(adjust)) +
+    theme_minimal(base_family = "Avenir") +
     theme(
       legend.position = "top",
       legend.direction = "horizontal",
-      legend.margin=margin(0,0,0,0)
+      legend.margin = margin(0, 0, 0, 0)
     )
   
   return(g)
@@ -746,23 +896,27 @@ show_adjust("LNP_2PP")
 
 ```{r summary-adjust-tab}
 tab <- bind_rows(
-  xi_adjust %>% 
-    filter(days_to_election==0 & type=="raw") %>%
+  xi_adjust %>%
+    filter(days_to_election == 0 & type == "raw") %>%
     select(-adjust) %>%
     distinct() %>%
-    mutate(adjust="Unadjusted poll average") %>%
-    pivot_wider(id_cols=adjust,
-                names_from = party,
-                values_from = mean),
-  xi_adjust %>% 
-    filter(days_to_election==0 & type=="adjusted") %>% 
-    pivot_wider(id_cols=adjust,
-                names_from = party,
-                values_from = mean) %>%
-    slice(c(2,1,3))
-) 
+    mutate(adjust = "Unadjusted poll average") %>%
+    pivot_wider(
+      id_cols = adjust,
+      names_from = party,
+      values_from = mean
+    ),
+  xi_adjust %>%
+    filter(days_to_election == 0 & type == "adjusted") %>%
+    pivot_wider(
+      id_cols = adjust,
+      names_from = party,
+      values_from = mean
+    ) %>%
+    slice(c(2, 1, 3))
+)
 
-save("tab",file="/tmp/tab.RData")
+save("tab", file = "/tmp/tab.RData")
 ```
 
 # Appendix
