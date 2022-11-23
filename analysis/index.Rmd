@@ -73,6 +73,8 @@ actuals_2022 <-
 # Summary
 
 ::: {#summary .highlights .nonumber}
+-   This document was originally being updated regularly over the course of the 2022 election campaign; with actual result now in hand, this document serves as an archive of sorts, a basis for examining the performance of the polls and poll averages (to be presented elsewhere).   With just one or two exceptions highlighted in red, this document is as it was Election Day 21 May 2022.
+
 -   Averages of recent polls indicate the Coalition will win 46.5% of the
     two-party preferred (TPP) vote; see Table \@ref(tab:load-summary-table).
 
@@ -85,7 +87,9 @@ actuals_2022 <-
     the election is closer to 50.8-49.2 ALP/Coalition (TPP).
 
 -   If the polls are carrying the average level of bias seen in the five
-    previous elections (2007 to 2019), then the election is more likely 52.1% ALP TPP to the Coalition's 47.9%. <span style="color: red;">UPDATE (post-election): these average-bias-adjustment results match the _actual_ election results.</span>
+    previous elections (2007 to 2019), then the election is more likely 52.1% ALP TPP to the Coalition's 47.9%. 
+    
+-  <span style="color: #dd0000;">UPDATE (post-election): these average-bias-adjusted TPP results match the _actual_ election TPP results.</span>
 
 -   It is extremely unlikely that the Coalition can form government if it were
     to win 47% or less of the national TPP vote.
@@ -136,6 +140,7 @@ kable(
 ) %>%
   ##kableExtra::row_spec(1:2, hline_after = TRUE) %>%
   kableExtra::row_spec(4:5,hline_after = TRUE) %>% 
+  kableExtra::row_spec(6,color = "#dd0000") %>% 
   kableExtra::kable_styling(full_width = TRUE,
                             bootstrap_options = "basic")
 ```
