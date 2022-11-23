@@ -2,6 +2,7 @@
 title: "Poll averages for the 2022 Australian election"
 author: "Professor Simon Jackman"
 date: "`r format(Sys.time(), '%e %B %Y')`"
+site: workflowr::wflow_site
 output:
   bookdown::html_document2:
     css: preamble.css
@@ -19,7 +20,9 @@ editor_options:
 
 ```{r setup, include=FALSE}
 library(knitr)
-knitr::opts_chunk$set(echo=FALSE,warnings=FALSE,message = FALSE)
+knitr::opts_chunk$set(echo = FALSE,
+                      warnings = FALSE,
+                      message = FALSE)
 options(knitr.kable.NA = '')
 options(htmltools.dir.version = FALSE)
 
@@ -27,29 +30,44 @@ library(tidyverse)
 library(here)
 library(fst)
 library(r2d3)
-options(r2d3.shadow=FALSE)
+options(r2d3.shadow = FALSE)
 library(DT)
-theStates <- c("ACT","NT","QLD","NSW","VIC","TAS","SA","WA")
+theStates <- c("ACT", "NT", "QLD", "NSW", "VIC", "TAS", "SA", "WA")
 
-electionDates <- c("1996"=as.Date("1996/03/02"),
-                   "1998"=as.Date("1998/10/03"),
-                   "2001"=as.Date("2001/11/10"),
-                   "2004"=as.Date("2004/10/09"),
-                   "2007"=as.Date("2007/11/24"),
-                   "2010"=as.Date("2010/08/21"),
-                   "2013"=as.Date("2013/09/07"),
-                   "2016"=as.Date("2016/07/02"),
-                   "2019"=as.Date("2019/05/18"),
-                   "2022"=as.Date("2022/05/21"))
+electionDates <- c(
+  "1996" = as.Date("1996/03/02"),
+  "1998" = as.Date("1998/10/03"),
+  "2001" = as.Date("2001/11/10"),
+  "2004" = as.Date("2004/10/09"),
+  "2007" = as.Date("2007/11/24"),
+  "2010" = as.Date("2010/08/21"),
+  "2013" = as.Date("2013/09/07"),
+  "2016" = as.Date("2016/07/02"),
+  "2019" = as.Date("2019/05/18"),
+  "2022" = as.Date("2022/05/21")
+)
 
-actual <- read_csv(file=here("data/historic/election_results.csv")) %>%
-  mutate(date=as.Date(date,format="%d/%m/%y")) %>%
-  mutate(year=strftime(date,format="%y")) %>%
-  filter(date==max(date)) %>%
-  rename(LNP_2PP=LNP2PP,ALP_2PP=ALP2PP) %>%
-  pivot_longer(cols=c("LNP","ALP","GRN","OTH","LNP_2PP","ALP_2PP"),
-               names_to = "what",
-               values_to = "y")
+actual <-
+  read_csv(file = here("data/historic/election_results.csv")) %>%
+  mutate(date = as.Date(date, format = "%d/%m/%y")) %>%
+  mutate(year = strftime(date, format = "%y")) %>%
+  filter(date == max(date)) %>%
+  rename(LNP_2PP = LNP2PP, ALP_2PP = ALP2PP) %>%
+  pivot_longer(
+    cols = c("LNP", "ALP", "GRN", "OTH", "LNP_2PP", "ALP_2PP"),
+    names_to = "what",
+    values_to = "y"
+  )
+
+actuals_2022 <- 
+  tribble(
+    ~what, ~y,
+    "LNP", 35.69,
+    "ALP", 32.58,
+    "GRN", 12.25,
+    "LNP_2PP", 47.87
+  ) %>% 
+  mutate(year = 2022)
 ```
 
 # Summary
@@ -81,6 +99,7 @@ At the end of the campaign:
 load("/tmp/tab.RData")
 tab <- bind_rows(
   tab,
+  
   actual %>%
     pivot_wider(
       id_cols = date,
@@ -88,23 +107,35 @@ tab <- bind_rows(
       values_from = y
     ) %>%
     mutate(adjust = "2019 results") %>%
-    select(-date, -OTH, -ALP_2PP)
+    select(-date, -OTH, -ALP_2PP),
+  
+  actuals_2022 %>% 
+     pivot_wider(
+      id_cols = year,
+      names_from = what,
+      values_from = y
+    ) %>%
+    mutate(adjust = "2022 results") %>%
+    select(-year)
 )
 
 names(tab)[1] <- ""
 
 kable(
   tab,
-  caption = paste(
-    "Summary of poll averages and adjustments, computed",
-    format(min(c(
-      Sys.time(), electionDates["2022"]
-    )), '%e %B %Y')
-  ),
+  caption = ##paste(
+    "Summary of poll averages and adjustments"
+  ##, computed",
+  ##  format(min(c(
+  ##    Sys.time(), electionDates["2022"]
+  ##  )), '%e %B %Y')
+  ##)
+  ,
   digits = 1,
   format = "html"
 ) %>%
-  kableExtra::row_spec(1:2, hline_after = TRUE) %>%
+  ##kableExtra::row_spec(1:2, hline_after = TRUE) %>%
+  kableExtra::row_spec(4:5,hline_after = TRUE) %>% 
   kableExtra::kable_styling(full_width = TRUE,
                             bootstrap_options = "basic")
 ```
