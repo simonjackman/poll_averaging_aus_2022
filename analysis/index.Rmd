@@ -70,10 +70,12 @@ actuals_2022 <-
   mutate(year = 2022)
 ```
 
+
+-   This document was updated regularly over the course of the 2022 election campaign; with actual 2022 election results now in hand, this document serves as an archive of sorts, a basis for examining the performance of the polls and poll averages (to be presented elsewhere).   With just one or two exceptions <span style="color: #dd0000;">highlighted in red</span>, this document is as it was Election Day 21 May 2022.
+
 # Summary
 
 ::: {#summary .highlights .nonumber}
--   This document was originally being updated regularly over the course of the 2022 election campaign; with actual result now in hand, this document serves as an archive of sorts, a basis for examining the performance of the polls and poll averages (to be presented elsewhere).   With just one or two exceptions <span style="color: #dd0000;">highlighted in red</span>, this document is as it was Election Day 21 May 2022.
 
 -   Averages of recent polls indicate the Coalition will win 46.5% of the
     two-party preferred (TPP) vote; see Table \@ref(tab:load-summary-table).
@@ -893,7 +895,7 @@ show_adjust <- function(theParty) {
     geom_ribbon(alpha = .35,
                 show.legend = FALSE,
                 color = "transparent") +
-    geom_line(size = 1.25, show.legend = TRUE) +
+    geom_line(linewidth = 1.25, show.legend = TRUE) +
     scale_fill_manual(
       "",
       values = c("raw" = gray(.5),
