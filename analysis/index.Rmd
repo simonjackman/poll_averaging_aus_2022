@@ -457,7 +457,7 @@ get_xi <- function(theParty,
   } else {
     f <- theFiles[grepl(pattern = theDate, theFiles)]
   }
-  print(f)
+  ##print(f)
   
   xi <- readRDS(f)
   return(xi)
@@ -499,7 +499,7 @@ inspect <-
     
     g <- g +
       geom_ribbon(fill = gray(.85), alpha = .5) +
-      geom_line(size = 3, color = thisCol) +
+      geom_line(linewidth = 3, color = thisCol) +
       geom_linerange(
         data = d2022,
         inherit.aes = FALSE,
